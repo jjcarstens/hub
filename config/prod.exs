@@ -10,9 +10,9 @@ config :hub, HubWeb.Endpoint,
 
 config :hub, Hub.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: "hub_prod",
   pool_size: 2,
-  ssl: true
+  ssl: true,
+  url: System.get_env("DATABASE_URL")
 
 config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
   client_id: System.get_env("CLIENT_ID"),
