@@ -14,7 +14,7 @@ defmodule Hub.Schema.User do
 
   def changeset(%__MODULE__{} = user, attrs) do
     attrs = format_names(user, attrs)
-    
+
     user
     |> cast(attrs, __MODULE__.__schema__(:fields))
     |> validate_required([:email, :first_name])
@@ -24,7 +24,7 @@ defmodule Hub.Schema.User do
   end
 
   defp format_names(%{first_name: nil}, %{name: name} = attrs) when is_bitstring(name) do
-    [first_name, last_name] = String.split(name, " ")
+    [first_name, last_name, _] = String.split(name, " ")
     Map.merge(attrs, %{first_name: first_name, last_name: last_name})
   end
   defp format_names(user, _attrs), do: user
