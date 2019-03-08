@@ -27,7 +27,7 @@ config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
   providers: [
-    facebook: {Ueberauth.Strategy.Facebook, []}
+    facebook: {Ueberauth.Strategy.Facebook, [callback_params: ["origin"]]}
   ]
 
 # oauth2 uses Poison as serializer default. Chagne to Jason

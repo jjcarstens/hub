@@ -16,7 +16,7 @@ defmodule HubWeb.Auth do
       nil ->
         conn
         |> put_flash(:error, "You must be logged in to view this page")
-        |> redirect(to: "/login")
+        |> redirect(to: "/login?origin=#{URI.encode_www_form(conn.request_path)}")
         |> halt()
     end
   end
