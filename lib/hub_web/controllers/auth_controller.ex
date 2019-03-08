@@ -10,19 +10,26 @@ defmodule HubWeb.AuthController do
     |> redirect(to: "/")
   end
   def callback(%{assigns: %{ueberauth_auth: %{info: user_info, uid: uid}}} = conn, params) do
-    {:ok, user} = user_info
-    |> Map.delete(:__struct__)
-    |> Map.put(:facebook_id, uid)
-    |> Users.find_or_create_by_email()
+    case [user_info.name =~ ~r/Carstens/i, user_info.name =~ ~r/Jon|Stephanie|Ryan|Fay|Jakob/i] do
+      [true, true] ->
+        {:ok, user} = user_info
+        |> Map.delete(:__struct__)
+        |> Map.put(:facebook_id, uid)
+        |> Users.find_or_create_by_email()
 
-    origin = params["origin"] || "/"
+        origin = params["origin"] || "/"
 
-    conn
-    |> configure_session(renew: true)
-    |> put_session(:user_id, user.id)
-    |> assign(:current_user, user)
-    |> put_flash(:info, "#{user.first_name} signed in")
-    |> redirect(to: origin)
+        conn
+        |> configure_session(renew: true)
+        |> put_session(:user_id, user.id)
+        |> assign(:current_user, user)
+        |> put_flash(:info, "#{user.first_name} signed in")
+        |> redirect(to: origin)
+      _ ->
+        conn
+        |> put_flash(:error, "Your user is not allowed")
+        |> redirect(to: "/")
+    end
   end
 
   def login(conn, params) do

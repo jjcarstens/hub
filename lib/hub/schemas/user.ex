@@ -24,8 +24,12 @@ defmodule Hub.Schema.User do
   end
 
   defp format_names(%{first_name: nil}, %{name: name} = attrs) when is_bitstring(name) do
-    [first_name, last_name, _] = String.split(name, " ")
+    [first_name, last_name] = String.split(name, " ") |> parse_name()
     Map.merge(attrs, %{first_name: first_name, last_name: last_name})
   end
   defp format_names(user, _attrs), do: user
+
+  defp parse_name([first, middle, last]), do: [first, last]
+  defp parse_name([first, last]), do: [first, last]
+  defp parse_name([first, maybe_last | _]), do: [first, maybe_last]
 end
