@@ -16,7 +16,7 @@ config :hub_api, HubApi.Endpoint,
   code_reloader: false,
   url: [host: System.get_env("HOST")]
 
-config :hub, HubContext.Repo,
+config :hub_context, HubContext.Repo,
   pool_size: 2,
   ssl: true,
   url: System.get_env("DATABASE_URL")
