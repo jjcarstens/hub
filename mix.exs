@@ -67,7 +67,7 @@ defmodule Hub.MixProject do
     case Mix.env() do
       :prod ->
         [
-          {:hub_api, git: "https://github.com/jjcarstens/hub_context.git"},
+          {:hub_api, git: "https://github.com/jjcarstens/hub_api.git"},
           {:hub_context, git: "https://github.com/jjcarstens/hub_context.git"}
         ]
       _ ->
