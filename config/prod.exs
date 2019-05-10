@@ -8,8 +8,15 @@ config :hub, HubWeb.Endpoint,
   server: true,
   url: [host: System.get_env("HOST")]
 
-config :hub, Hub.Repo,
-  adapter: Ecto.Adapters.Postgres,
+config :hub_api, HubApi.Endpoint,
+  http: [:inet6, port: System.get_env("API_PORT") || 4080],
+  secret_key_base: System.get_env("API_SECRET_KEY_BASE"),
+  server: true,
+  render_errors: [view: HubApi.ErrorView, accepts: ~w(json)],
+  code_reloader: false,
+  url: [host: System.get_env("HOST")]
+
+config :hub, HubContext.Repo,
   pool_size: 2,
   ssl: true,
   url: System.get_env("DATABASE_URL")

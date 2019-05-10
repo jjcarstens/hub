@@ -2,7 +2,7 @@ defmodule HubWeb.AuthController do
   use HubWeb, :controller
   plug Ueberauth
 
-  alias Hub.Context.Users
+  alias HubContext.Users
 
   def callback(%{assigns: %{ueberauth_failure: %{errors: errors}}} = conn, _params) do
     errors

@@ -5,7 +5,7 @@ defmodule HubWeb.NervesSocket do
   channel "nerves:*", HubWeb.NervesChannel
 
   # performing token verification on connect.
-  def connect(%{"token" => token} = params, socket, _connect_info) do
+  def connect(%{"token" => token}, socket, _connect_info) do
     case Phoenix.Token.verify(socket, "nerves token salt", token, max_age: :infinity) do
       {:ok, nerves_id} ->
         socket = assign(socket, :nerves_id, nerves_id)
@@ -15,7 +15,7 @@ defmodule HubWeb.NervesSocket do
     end
   end
 
-  def connect(_params, socket, _connect_info), do: :error
+  def connect(_params, _socket, _connect_info), do: :error
 
   def id(socket), do: "nerves:#{socket.assigns.nerves_id}"
 end

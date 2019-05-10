@@ -37,6 +37,8 @@ defmodule Hub.MixProject do
       {:drab, "~> 0.10"},
       {:ecto_sql, "~> 3.0"},
       {:gettext, "~> 0.11"},
+      {:hub_api, git: "git@github.com:jjcarstens/hub_context"},
+      {:hub_context, git: "git@github.com:jjcarstens/hub_context"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.4.1"},
       {:phoenix_ecto, "~> 4.0"},

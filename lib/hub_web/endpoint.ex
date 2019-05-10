@@ -44,7 +44,8 @@ defmodule HubWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_hub_key",
-    signing_salt: "yUEuWAW4"
+    signing_salt: "yUEuWAW4",
+    max_age: 60*60*24*30 # 30 days
 
   plug HubWeb.Router
 end

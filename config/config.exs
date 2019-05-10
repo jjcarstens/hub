@@ -7,8 +7,8 @@
 # General application configuration
 use Mix.Config
 
-config :hub,
-  ecto_repos: [Hub.Repo]
+config :hub_context,
+  ecto_repos: [HubContext.Repo]
 
 # Configures the endpoint
 config :hub, HubWeb.Endpoint,
@@ -49,6 +49,16 @@ config :phoenix, :template_engines,
 # Configures Drab for webpack
 config :drab, HubWeb.Endpoint,
   js_socket_constructor: "window.__socket"
+
+config :hub_api, HubApi.Endpoint,
+  url: [host: "localhost"],
+  http: [port: 4080],
+  secret_key_base: "Kkg0a4kTsKMUM+FgQu5wehO/PC+iXvRPltznzkktV0zSwU4PRdBHK0jx3K80OPkR",
+  server: true,
+  root: Path.dirname(__DIR__),
+  render_errors: [view: HubApi.ErrorView, accepts: ~w(json)],
+  pubsub: [name: Nerves.PubSub, adapter: Phoenix.PubSub.PG2],
+  code_reloader: false
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

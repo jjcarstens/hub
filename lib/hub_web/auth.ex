@@ -1,6 +1,8 @@
 defmodule HubWeb.Auth do
   use Phoenix.Controller
 
+  alias HubContext.Users
+
   def init(_params), do: :ok
 
   def call(%{request_path: "/auth/facebook" <> _} = conn, _params), do: conn
@@ -12,7 +14,7 @@ defmodule HubWeb.Auth do
   def call(conn, _params) do
     case get_session(conn, :user_id) do
       user_id when is_number(user_id) ->
-        assign(conn, :current_user, Hub.Repo.get(Hub.Schema.User, user_id))
+        assign(conn, :current_user, Users.get_by_id(user_id))
       nil ->
         conn
         |> put_flash(:error, "You must be logged in to view this page")
