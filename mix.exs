@@ -37,8 +37,6 @@ defmodule Hub.MixProject do
       {:drab, "~> 0.10"},
       {:ecto_sql, "~> 3.0"},
       {:gettext, "~> 0.11"},
-      {:hub_api, git: "https://github.com:jjcarstens/hub_context.git"},
-      {:hub_context, git: "https://github.com:jjcarstens/hub_context.git"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.4.1"},
       {:phoenix_ecto, "~> 4.0"},
@@ -48,7 +46,7 @@ defmodule Hub.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
       {:ueberauth_facebook, "~> 0.7"}
-    ]
+    ] ++ private_deps()
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
@@ -63,5 +61,20 @@ defmodule Hub.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
+  end
+
+  defp private_deps do
+    case Mix.env() do
+      :prod ->
+        [
+          {:hub_api, git: "https://github.com/jjcarstens/hub_context.git"},
+          {:hub_context, git: "https://github.com/jjcarstens/hub_context.git"}
+        ]
+      _ ->
+        [
+          {:hub_api, path: "../hub_api"},
+          {:hub_context, path: "../hub_context"}
+        ]
+    end
   end
 end
