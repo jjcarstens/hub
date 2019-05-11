@@ -68,13 +68,13 @@ defmodule Hub.MixProject do
     case Mix.env() do
       :prod ->
         [
-          {:hub_api, git: "https://github.com/jjcarstens/hub_api.git"},
-          {:hub_context, git: "https://github.com/jjcarstens/hub_context.git"}
+          {:hub_api, git: "https://github.com/jjcarstens/hub_api.git", override: true},
+          {:hub_context, git: "https://github.com/jjcarstens/hub_context.git", override: true}
         ]
       _ ->
         [
-          {:hub_api, path: "../hub_api"},
-          {:hub_context, path: "../hub_context"}
+          {:hub_api, path: "../hub_api", override: true},
+          {:hub_context, path: "../hub_context", override: true}
         ]
     end
   end
