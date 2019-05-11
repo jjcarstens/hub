@@ -55,3 +55,5 @@ config :hub_context, HubContext.Repo,
   database: "hub_db",
   hostname: "localhost",
   pool_size: 10
+
+config :hub_api, auth: false

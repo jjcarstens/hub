@@ -42,3 +42,6 @@ config :master_proxy,
       phoenix_endpoint: HubWeb.Endpoint
     }
   ]
+
+# Force token auth for API
+config :hub_api, auth: true
