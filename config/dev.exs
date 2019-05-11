@@ -22,6 +22,11 @@ config :hub, HubWeb.Endpoint,
     ]
   ]
 
+config :hub_api, HubApi.Endpoint,
+  url: [host: "localhost"],
+  http: [port: 4080],
+  code_reloader: false
+
 # Watch static and templates for browser reloading.
 config :hub, HubWeb.Endpoint,
   live_reload: [

@@ -52,7 +52,6 @@ config :drab, HubWeb.Endpoint,
 
 config :hub_api, HubApi.Endpoint,
   url: [host: "localhost"],
-  http: [port: 4080],
   secret_key_base: "Kkg0a4kTsKMUM+FgQu5wehO/PC+iXvRPltznzkktV0zSwU4PRdBHK0jx3K80OPkR",
   server: true,
   root: Path.dirname(__DIR__),

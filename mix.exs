@@ -38,6 +38,7 @@ defmodule Hub.MixProject do
       {:ecto_sql, "~> 3.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
+      {:master_proxy, "~> 0.1"},
       {:phoenix, "~> 1.4.1"},
       {:phoenix_ecto, "~> 4.0"},
       {:phoenix_html, "~> 2.11"},
