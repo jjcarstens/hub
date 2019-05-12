@@ -28,20 +28,5 @@ config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
 # Do not print debug messages in production
 config :logger, level: :info
 
-config :master_proxy,
-  force_ssl: [rewrite_on: [:x_forwarded_proto]],
-  http: [:inet6, port: System.get_env("PORT") || 4000],
-  server: true,
-  backends: [
-    %{
-      host: ~r/api.jjcarstens.com/,
-      phoenix_endpoint: HubApi.Endpoint
-    },
-    %{
-      host: ~r/jjcarstens.com/,
-      phoenix_endpoint: HubWeb.Endpoint
-    }
-  ]
-
 # # Force token auth for API
 # config :hub_api, auth: true

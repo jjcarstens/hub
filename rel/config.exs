@@ -31,13 +31,13 @@ environment :dev do
   # dev mode.
   set dev_mode: true
   set include_erts: false
-  set cookie: :"S]AR*bZn^ayfy9DY(4=Vn~H1{Gb`HwovMwxm9bqezNTpbDR$t2xBCS>qD|dyDEqq"
+  set cookie: :"S7X<mo>({kK*^@B6~79C@qyTdn`0vH3Q^1tKh~Gx|oS`&^JXuAj<;13dbx(7;`WQ"
 end
 
 environment :prod do
   set include_erts: true
   set include_src: false
-  set cookie: :"$]*=JCBE|DP]N[q%1FQVb2~_1p/PKFHcu4ls.ql911|g@Y/}7NhlZx!zJ>;c7c@V"
+  set cookie: :"RygucLsq3x(Krok9oIq1Z[GuPgYhau|qSvDMDt^i8(|xCBBR_6~`nDU/RV!f|B8h"
   set vm_args: "rel/vm.args"
 end
 
@@ -47,9 +47,12 @@ end
 # will be used by default
 
 release :hub do
-  set version: current_version(:hub)
+  set version: "0.1.0"
   set applications: [
-    :runtime_tools
+    :runtime_tools,
+    hub_api: :permanent,
+    hub_context: :permanent,
+    hub_web: :permanent
   ]
 end
 
