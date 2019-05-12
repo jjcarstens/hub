@@ -1,39 +1,53 @@
 defmodule HubContext.StorageRoom do
-  @behaviour HubContext.Toggler
+  @type toggle_value :: :on | :off | :locked | :unlocked | 1 | 0
 
-  @toggler Application.get_env(:hub_context, :toggler)
+  @callback read_lock() :: :locked | :unlocked
+  @callback read_lights() :: :on | :off
+
+  @callback toggle_lights(toggle_value()) :: toggle_value() | :bad_toggle_value
+  @callback toggle_lock(toggle_value()) :: toggle_value() | :bad_toggle_value
 
   @error """
-  HubContext.StorageRoom requires a module to implement HubContext.Toggler
-  behavior and specify it the config so that toggling behaviour can be
-  customized to the situation. i.e. Running on the device vs remote via web.
+  HubContext.StorageRoom must behavior be implemented to interact with lock
+  and lights so that toggling behaviour can be customized to the situation.
+  i.e. Running on the device vs remote via web.
 
   Define a module that uses the behavior and expected functions
 
   defmodule MyModule do
-    @behavior HubContext.Toggler
+    @behavior HubContext.StorageRoom
     ...
   end
 
   Then be sure to set the module in your config:
 
-  config :hub_context, :toggler, MyModule
+  config :hub_context, :storage_room, MyModule
   """
 
+  def read_lock do
+    case Application.get_env(:hub_context, :storage_room) do
+      nil -> raise(@error)
+      module -> apply(module, :read_lock, [])
+    end
+  end
+  def read_lights do
+    case Application.get_env(:hub_context, :storage_room) do
+      nil -> raise(@error)
+      module -> apply(module, :read_lights, [])
+    end
+  end
 
-  @impl true
-  def read_lock when is_nil(@toggler), do: raise(@error)
-  def read_lock, do: apply(@toggler, :read_lock, [])
+  def toggle_lock(val) do
+    case Application.get_env(:hub_context, :storage_room) do
+      nil -> raise(@error)
+      module -> apply(module, :toggle_lock, [val])
+    end
+  end
 
-  @impl true
-  def read_lights when is_nil(@toggler), do: raise(@error)
-  def read_lights, do: apply(@toggler, :read_lights, [])
-
-  @impl true
-  def toggle_lock(_val) when is_nil(@toggler), do: raise(@error)
-  def toggle_lock(val), do: apply(@toggler, :toggle_lock, [val])
-
-  @impl true
-  def toggle_lights(_val) when is_nil(@toggler), do: raise(@error)
-  def toggle_lights(val), do: apply(@toggler, :toggle_lights, [val])
+  def toggle_lights(val) do
+    case Application.get_env(:hub_context, :storage_room) do
+      nil -> raise(@error)
+      module -> apply(module, :toggle_lights, [val])
+    end
+  end
 end
