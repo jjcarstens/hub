@@ -20,7 +20,7 @@ defmodule HubApi.SelectionController do
     end
   end
 
-  def turn_picker(conn, params) do
+  def turn_picker(conn, _params) do
     conn
     |> put_status(:bad_request)
     |> json(%{error: "type must be one of #{inspect(@allowed_types)}"})

@@ -30,6 +30,6 @@ defmodule HubWeb.NervesChannel do
 
   def handle_in(_msg, _payload, socket) do
     msg = "bad payload or unknown message"
-    {:reply, {:error, %{message: msg}}}
+    {:reply, {:error, %{message: msg}}, socket}
   end
 end

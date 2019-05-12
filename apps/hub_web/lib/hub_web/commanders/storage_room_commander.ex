@@ -12,17 +12,17 @@ defmodule HubWeb.StorageRoomCommander do
     watcher_loop(socket)
   end
 
-  def page_loaded(socket) do
+  def page_loaded(_socket) do
     HubWeb.Endpoint.broadcast_from! self(), "nerves:storage_room", "read_lights", %{}
     HubWeb.Endpoint.broadcast_from! self(), "nerves:storage_room", "read_lock", %{}
   end
 
-  defhandler toggle_lights(socket, sender) do
+  defhandler toggle_lights(socket, _sender) do
     val = toggle_val(peek!(socket, :lights_state))
     HubWeb.Endpoint.broadcast_from! self(), "nerves:storage_room", "toggle_lights", %{toggle: val}
   end
 
-  defhandler toggle_lock(socket, sender) do
+  defhandler toggle_lock(socket, _sender) do
     val = toggle_val(peek!(socket, :lock_state))
     HubWeb.Endpoint.broadcast_from! self(), "nerves:storage_room", "toggle_lock", %{toggle: val}
   end
