@@ -22,6 +22,8 @@ config :hub_web, HubWeb.Endpoint,
     ]
   ]
 
+config :hub_web, auth: false
+
 # config :hub_api, HubApi.Endpoint,
 #   url: [host: "localhost"],
 #   http: [port: 4080],
