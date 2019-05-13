@@ -9,6 +9,9 @@ defmodule HubWeb.StorageRoom do
 
   defguard valid_value(val) when val in @valid_values
 
+  # TODO: This is all asynchronous. Make ability to get direct
+  # read results to use API from web remotely...
+
   def read_lock do
     Phoenix.PubSub.broadcast(HubWeb.PubSub, @topic, {:read, :lock})
   end

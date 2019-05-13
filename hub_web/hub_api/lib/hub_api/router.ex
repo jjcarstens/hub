@@ -10,5 +10,11 @@ defmodule HubApi.Router do
     pipe_through :hub_api
 
     get "/whose_turn", SelectionController, :turn_picker
+
+    scope "/storage_room" do
+      get "/", StorageRoomController, :index
+      get "/:type", StorageRoomController, :show
+      put "/:type/:toggle", StorageRoomController, :update
+    end
   end
 end

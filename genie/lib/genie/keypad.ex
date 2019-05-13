@@ -37,8 +37,8 @@ defmodule Genie.Keypad do
         :ok
     end
 
-    # reset the input
-    %{state | input: ""}
+    # Pass on D. May be holding it to reset lights and lock
+    %{state | input: input <> "D"}
   end
 
   @impl true
