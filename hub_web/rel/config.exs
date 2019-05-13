@@ -46,8 +46,8 @@ end
 # when running `mix release`, the first release in the file
 # will be used by default
 
-release :hub do
-  set version: current_version(:hub)
+release :hub_web do
+  set version: current_version(:hub_web)
   set applications: [
     :runtime_tools
   ]
