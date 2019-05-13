@@ -1,4 +1,0 @@
-# Hub
-
-**TODO: Add description**
-
