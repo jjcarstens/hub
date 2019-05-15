@@ -6,7 +6,7 @@ defmodule Genie.MixProject do
   def project do
     [
       app: :genie,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.8",
       archives: [nerves_bootstrap: "~> 1.4"],
       start_permanent: Mix.env() == :prod,
@@ -40,6 +40,8 @@ defmodule Genie.MixProject do
       {:jason, "~> 1.1"},
       {:keypad, "~> 0.1"},
       {:nerves, "~> 1.4", runtime: false},
+      {:nerves_hub, "~> 0.1"},
+      {:nerves_runtime, "~> 0.8"},
       {:shoehorn, "~> 0.4"},
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
@@ -48,7 +50,6 @@ defmodule Genie.MixProject do
       # Dependencies for all targets except :host
       {:circuits_gpio, "~> 0.3", targets: @all_targets, override: true},
       {:circuits_spi, "~> 0.1", targets: @all_targets},
-      {:nerves_runtime, "~> 0.6", targets: @all_targets},
       {:nerves_init_gadget, "~> 0.4", targets: @all_targets},
 
       # Dependencies for specific targets
