@@ -1,6 +1,8 @@
 use Mix.Config
 
-config :nerves, :firmware, rootfs_overlay: "rootfs_overlay"
+config :nerves, :firmware,
+  rootfs_overlay: "rootfs_overlay",
+  provisioning: :nerves_hub
 
 config :shoehorn,
   init: [:nerves_runtime, :nerves_init_gadget],
@@ -12,11 +14,14 @@ config :logger, backends: [RingLogger]
 # SSH access
 #
 keys = [Path.join([System.user_home!(), ".ssh", "id_rsa.pub"])]
-  |> Enum.filter(&File.exists?/1)
+       |> Enum.filter(&File.exists?/1)
 
 config :nerves_firmware_ssh,
   authorized_keys: Enum.map(keys, &File.read!/1)
 
+##
+# Setup Networking
+passcode = File.read!(".wifi_passcode") |> String.trim
 
 # Setting the node_name will enable Erlang Distribution.
 # Only enable this for prod if you understand the risks.
@@ -28,10 +33,6 @@ config :nerves_init_gadget,
   mdns_domain: "lamp.local",
   node_name: node_name,
   node_host: :mdns_domain
-
-##
-# Setup Networking
-passcode = File.read!(".wifi_passcode") |> String.trim
 
 config :nerves_network,
   regulatory_domain: "US"
@@ -47,40 +48,22 @@ config :nerves_network, :default,
     ipv4_address_method: :dhcp
   ]
 
-config :genie, :websocket_url, System.get_env("WEBSOCKET_URL") || "ws://localhost:4000/nerves/websocket"
-config :genie, :websocket_token, System.get_env("WEBSOCKET_TOKEN") || "some_token"
+config :genie,
+  websocket_url: System.get_env("WEBSOCKET_URL") || "ws://localhost:4000/nerves/websocket",
+  websocket_token: System.get_env("WEBSOCKET_TOKEN") || "some_token"
 
-# config :hub_api, HubApi.Endpoint,
-#   url: [host: "localhost"],
-#   http: [port: 4080],
-#   secret_key_base: "Kkg0a4kTsKMUM+FgQu5wehO/PC+iXvRPltznzkktV0zSwU4PRdBHK0jx3K80OPkR",
-#   server: true,
-#   root: Path.dirname(__DIR__),
-#   render_errors: [view: ApiWeb.ErrorView, accepts: ~w(json)],
-#   pubsub: [name: Nerves.PubSub, adapter: Phoenix.PubSub.PG2],
-#   code_reloader: false
-
-# config :hub_api, auth: false
-
-# config :hub_context, ecto_repos: [HubContext.Repo]
-
-# # Use Jason for JSON parsing in Phoenix
-# config :phoenix, :json_library, Jason
-# import_config("../deps/hub_web/apps/hub_web/config/config.exs")
-# import_config("../deps/hub_api/apps/hub_api/config/config.exs")
-# import_config("../deps/hub_context/apps/hub_context/config/config.exs")
-
+# Just reuse the hub_web config that is part of poncho
 import_config("../../hub_web/config/config.exs")
+
+config :hub_context, :storage_room, Genie
 
 config :hub_web, HubWeb.Endpoint,
   server: true,
   code_reloader: false
 
-config :hub_context, :storage_room, Genie
 config :hub_web, auth: false
 
-config :nerves, :firmware, provisioning: :nerves_hub
-
+# Setup of mocking and loading of Nerves to be able to run on host
 if Mix.target() == :host do
   config :nerves_runtime, :kernel, autoload_modules: false
   config :nerves_runtime, target: "host"
@@ -103,7 +86,7 @@ if Mix.target() == :host do
   ]
 end
 
-
+# Put things outside of source control here
 if File.exists?("config/home.secret.exs") do
   import_config "home.secret.exs"
 end

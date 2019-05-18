@@ -1,16 +1,5 @@
-# This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
-#
-# This configuration file is loaded before any dependency and
-# is restricted to this project.
-
-# General application configuration
 use Mix.Config
 
-config :hub_context,
-  ecto_repos: [HubContext.Repo]
-
-# Configures the endpoint
 config :hub_web, HubWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "KbHqXHkKoMGLqJS9gtKkFUo5ob8OKklq+U9UhlkPhTH9XDx83w2pxGz8VEhfryg1",
@@ -18,7 +7,19 @@ config :hub_web, HubWeb.Endpoint,
   server: true,
   pubsub: [name: HubWeb.PubSub, adapter: Phoenix.PubSub.PG2]
 
-# Configures Elixir's Logger
+config :hub_api, HubApi.Endpoint,
+  url: [host: "localhost"],
+  secret_key_base: "Kkg0a4kTsKMUM+FgQu5wehO/PC+iXvRPltznzkktV0zSwU4PRdBHK0jx3K80OPkR",
+  server: true,
+  root: Path.dirname(__DIR__),
+  render_errors: [view: HubApi.ErrorView, accepts: ~w(json)],
+  pubsub: [name: Nerves.PubSub, adapter: Phoenix.PubSub.PG2],
+  code_reloader: false
+
+config :hub_context,
+  ecto_repos: [HubContext.Repo],
+  storage_room: HubWeb.StorageRoom
+
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
@@ -31,7 +32,7 @@ config :ueberauth, Ueberauth,
     facebook: {Ueberauth.Strategy.Facebook, [callback_params: ["origin"]]}
   ]
 
-# oauth2 uses Poison as serializer default. Chagne to Jason
+# oauth2 uses Poison as serializer default. Change to Jason
 config :oauth2, serializers: %{"application/json" => Jason}
 
 # Development Facebook Auth
@@ -51,17 +52,4 @@ config :phoenix, :template_engines,
 config :drab, HubWeb.Endpoint,
   js_socket_constructor: "window.__socket"
 
-config :hub_api, HubApi.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "Kkg0a4kTsKMUM+FgQu5wehO/PC+iXvRPltznzkktV0zSwU4PRdBHK0jx3K80OPkR",
-  server: true,
-  root: Path.dirname(__DIR__),
-  render_errors: [view: HubApi.ErrorView, accepts: ~w(json)],
-  pubsub: [name: Nerves.PubSub, adapter: Phoenix.PubSub.PG2],
-  code_reloader: false
-
-config :hub_context, :storage_room, HubWeb.StorageRoom
-
-# Import environment specific config. This must remain at the bottom
-# of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
