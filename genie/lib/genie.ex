@@ -7,6 +7,10 @@ defmodule Genie do
 
   defguard valid_value(val) when val in @valid_values
 
+  def ignore_motion(timeout), do: Genie.MotionSensor.ignore(timeout)
+
+  def motion_ignored?(), do: Genie.MotionSensor.ignored?
+
   def read_lock, do: GenServer.call(Genie.StorageRelay, :read_lock)
 
   def read_lights, do: GenServer.call(Genie.StorageRelay, :read_lights)

@@ -44,6 +44,9 @@ defmodule Radio.MixProject do
       {:replex, path: "../../replex"},
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
+      {:circuits_uart, "~> 1.3"},
+      {:circuits_gpio, "~> 0.4"},
+
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.6", targets: @all_targets},

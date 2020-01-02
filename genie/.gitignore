@@ -19,3 +19,4 @@ erl_crash.dump
 websocket_tokens
 *secret*
 /nerves-hub
+/priv

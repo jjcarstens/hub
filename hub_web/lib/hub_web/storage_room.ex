@@ -12,6 +12,14 @@ defmodule HubWeb.StorageRoom do
   # TODO: This is all asynchronous. Make ability to get direct
   # read results to use API from web remotely...
 
+  def ignore_motion(timeout) do
+    Phoenix.PubSub.broadcast(HubWeb.PubSub, @topic, {:ignore_motion, timeout})
+  end
+
+  def motion_ignored?() do
+    Phoenix.PubSub.broadcast(HubWeb.PubSub, @topic, {:ignore_motion, false})
+  end
+
   def read_lock do
     Phoenix.PubSub.broadcast(HubWeb.PubSub, @topic, {:read, :lock})
   end

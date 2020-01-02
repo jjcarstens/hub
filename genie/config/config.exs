@@ -5,48 +5,17 @@ config :nerves, :firmware,
   provisioning: :nerves_hub
 
 config :shoehorn,
-  init: [:nerves_runtime, :nerves_init_gadget],
+  init: [:nerves_runtime, :nerves_pack],
   app: Mix.Project.config()[:app]
 
 config :logger, backends: [RingLogger]
 
-##
-# SSH access
-#
-keys = [Path.join([System.user_home!(), ".ssh", "id_rsa.pub"])]
-       |> Enum.filter(&File.exists?/1)
-
-config :nerves_firmware_ssh,
-  authorized_keys: Enum.map(keys, &File.read!/1)
-
-##
-# Setup Networking
-passcode = File.read!(".wifi_passcode") |> String.trim
-
-# Setting the node_name will enable Erlang Distribution.
-# Only enable this for prod if you understand the risks.
-node_name = if Mix.env() != :prod, do: "genie"
-
-config :nerves_init_gadget,
-  ifname: "wlan0",
-  address_method: :dhcp,
-  mdns_domain: "lamp.local",
-  node_name: node_name,
-  node_host: :mdns_domain
+config :nerves_pack,
+  host: ["genie", "storage"],
+  wifi_wizard: true
 
 config :nerves_network,
   regulatory_domain: "US"
-
-config :nerves_network, :default,
-  wlan0: [
-    networks: [
-      [ssid: "nunya", psk: "bidness", key_mgmt: :"WPA-PSK"],
-      [ssid: "zwei.vier_hurtz", psk: passcode, key_mgmt: :"WPA-PSK"]
-    ]
-  ],
-  eth0: [
-    ipv4_address_method: :dhcp
-  ]
 
 config :genie,
   websocket_url: System.get_env("WEBSOCKET_URL") || "ws://localhost:4000/nerves/websocket",
@@ -55,7 +24,9 @@ config :genie,
 # Just reuse the hub_web config that is part of poncho
 import_config("../../hub_web/config/config.exs")
 
-config :hub_context, :storage_room, Genie
+config :hub_context,
+  radio: Genie.Radio,
+  storage_room: Genie
 
 config :hub_web, HubWeb.Endpoint,
   server: true,

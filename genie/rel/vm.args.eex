@@ -5,7 +5,7 @@
 ##  for read only filesystem.
 
 -name genie@lamp.local
--setcookie 7critj72iczxpjier2nbnbmbh7bsd62uqrihzigl5hwwjnt5eluuy3tlgkowow5f
+-setcookie <%= @release.options[:cookie] %>
 
 ## Use Ctrl-C to interrupt the current shell rather than invoking the emulator's
 ## break handler and possibly exiting the VM.

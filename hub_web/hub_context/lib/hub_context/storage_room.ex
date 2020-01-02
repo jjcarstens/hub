@@ -1,6 +1,9 @@
 defmodule HubContext.StorageRoom do
   @type toggle_value :: :on | :off | :locked | :unlocked | 1 | 0
 
+  @callback ignore_motion(Integer.t()) :: :ok
+  @callback motion_ignored?() :: false | {true, Intger.t()}
+
   @callback read_lock() :: :locked | :unlocked
   @callback read_lights() :: :on | :off
 
@@ -23,6 +26,20 @@ defmodule HubContext.StorageRoom do
 
   config :hub_context, :storage_room, MyModule
   """
+
+  def ignore_motion(timeout) do
+    case Application.get_env(:hub_context, :storage_room) do
+      nil -> raise(@error)
+      module -> apply(module, :ignore_motion, [timeout])
+    end
+  end
+
+  def motion_ignored? do
+    case Application.get_env(:hub_context, :storage_room) do
+      nil -> raise(@error)
+      module -> apply(module, :motion_ignored?, [])
+    end
+  end
 
   def read_lock do
     case Application.get_env(:hub_context, :storage_room) do
