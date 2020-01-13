@@ -10,12 +10,10 @@ config :shoehorn,
 
 config :logger, backends: [RingLogger]
 
-config :nerves_pack,
-  host: ["genie", "storage"],
-  wifi_wizard: true
+config :nerves_pack, host: ["lamp", "storage"]
 
-config :nerves_network,
-  regulatory_domain: "US"
+# config :nerves_network,
+#   regulatory_domain: "US"
 
 config :genie,
   websocket_url: System.get_env("WEBSOCKET_URL") || "ws://localhost:4000/nerves/websocket",
