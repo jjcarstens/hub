@@ -1,0 +1,470 @@
+/* Loader */
+
+.loader {
+  height: 25px;
+  width: 25px;
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid #3498db; /* Blue */
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ******** */
+.order-button {
+  background: #e7e9ec;
+  border-radius: 3px;
+  border-color: #adb1b8 #a2a6ac #8d9096;
+  border-style: solid;
+  border-width: 1px;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0;
+  text-align: center;
+  text-decoration: none !important;
+  vertical-align: middle;
+}
+.order-button .order-button-inner {
+  background: #eff1f3;
+  background: -webkit-linear-gradient(top, #f7f8fa, #e7e9ec);
+  background: linear-gradient(to bottom, #f7f8fa, #e7e9ec);
+}
+.order-button:hover .order-button-inner {
+  background: #e0e3e8;
+  background: -webkit-linear-gradient(top, #e7eaf0, #d9dce1);
+  background: linear-gradient(to bottom, #e7eaf0, #d9dce1);
+}
+.order-button:active .order-button-inner {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+  background-color: #e7e9ec;
+  background-image: none;
+}
+.order-button:active .order-button-inner {
+  background-color: #dcdfe3;
+}
+.order-button:active,
+.order-button:active:hover {
+  border-color: #adb1b8 #a2a6ac #a2a6ac;
+}
+.order-button:hover {
+  border-color: #a2a6ac #979aa1 #82858a;
+}
+.order-button.order-button-focus,
+.order-button:focus {
+  outline: 0;
+  border-color: #e77600;
+  box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+}
+.order-button.order-button-pressed,
+.order-button.order-button-pressed:hover {
+  border-color: #adb1b8 #a2a6ac #a2a6ac;
+}
+
+.order-button.order-button-error {
+  border-color: #d00;
+}
+.order-button .order-button-text {
+  color: #111;
+}
+
+.order-button-text {
+  background-color: transparent;
+  border: 0;
+  display: block;
+  font-size: 13px;
+  line-height: 29px;
+  margin: 0;
+  outline: 0;
+  padding: 0 10px 0 11px;
+  text-align: center;
+  white-space: nowrap;
+}
+.order-button-text:focus {
+  outline: 0;
+}
+a.order-button-text,
+button.order-button-text {
+  width: 100%;
+  height: 100%;
+}
+.order-button-inner {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 29px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  border-radius: 2px;
+}
+
+.order-button a,
+.order-button:hover a {
+  color: #111;
+  text-decoration: none !important;
+}
+
+.order-button-disabled {
+  background: #f7f8fa;
+  background-image: none !important;
+  border-color: #e0e0e0 !important;
+  cursor: default !important;
+}
+.order-button-disabled .order-button-inner {
+  opacity: 0.4 !important;
+}
+.order-button-disabled .order-button-new {
+  background-color: #f9f3e5 !important;
+}
+.order-button-disabled:active .order-button-inner,
+.order-button-disabled:focus .order-button-inner,
+.order-button-disabled:hover .order-button-inner {
+  background-color: #f7f8fa;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+.order-button-disabled .order-button-text {
+  color: #555 !important;
+  cursor: default !important;
+  font-weight: 400;
+  text-shadow: none !important;
+}
+.order-button-disabled .order-button-inner {
+  background-image: none !important;
+  background-color: #f7f8fa !important;
+  box-shadow: none !important;
+}
+.order-button-disabled .order-button-input {
+  display: none;
+}
+
+/** PRIMARY button **/
+
+.order-button-new {
+  background: #174CF4;
+  border-color: #7090F4;
+  color: #111;
+}
+.order-button-new .order-button-inner {
+  background: #174CF4;
+  background: -webkit-linear-gradient(top, #7090F4, #174CF4);
+  background: linear-gradient(to bottom, #7090F4, #174CF4);
+}
+.order-button-new:hover .order-button-inner {
+  background: #7090F4;
+  background: -webkit-linear-gradient(top, #7090F4, #1254C1);
+  background: linear-gradient(to bottom, #7090F4, #1254C1);
+}
+.order-button-new:active .order-button-inner {
+  background-color: #174CF4;
+  background-image: none;
+}
+.order-button-new.order-button-focus,
+.order-button-new:focus,
+.order-button-new:hover,
+.order-button-new:hover:active {
+  border-color: #7090F4;
+}
+.order-button-new:active {
+  border-color: #a88734 #9c7e31 #9c7e31;
+}
+.order-button-new.order-button-focus,
+.order-button-new:focus {
+  border-color: #174CF4;
+}
+.order-button-new.order-button-disabled {
+  background-color: #f9f3e5 !important;
+  border-color: #e8e0cd !important;
+}
+.order-button-new.order-button-disabled .order-button-inner {
+  background-color: #f9f3e5 !important;
+}
+.order-button-new.order-button-disabled .order-button-text {
+  color: a_nullable_with_important();
+}
+.order-button-new.order-button-pressed,
+.order-button-new.order-button-pressed:hover {
+  border-color: #a88734 #9c7e31 #9c7e31;
+}
+.order-button-new.order-button-pressed .order-button-inner,
+.order-button-new.order-button-pressed:hover .order-button-inner {
+  background-image: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+  background-color: #174CF4;
+}
+.order-button-new .order-button-inner {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+.order-button-new .order-button-text {
+  color: #FFFF;
+}
+.order-button-disabled > .order-button-new .order-button-inner {
+  background-color: #f9f3e5 !important;
+}
+
+/** REQUESTED button **/
+
+.order-button-requested, .order-button-approved {
+  background: #17BF00;
+  border-color: #1BE300;
+  color: #fff;
+}
+.order-button-requested .order-button-inner,
+.order-button-approved .order-button-inner {
+  background: #17BF00;
+  background: -webkit-linear-gradient(top, #1BE300, #17BF00);
+  background: linear-gradient(to bottom, #1BE300, #17BF00);
+}
+.order-button-requested:hover .order-button-inner,
+.order-button-approved:hover .order-button-inner {
+  background: #15A900;
+  background: -webkit-linear-gradient(top, #19D200, #139C00);
+  background: linear-gradient(to bottom, #19D200, #139C00);
+}
+.order-button-requested:active .order-button-inner,
+.order-button-approved:active .order-button-inner {
+  background-color: #17BF00;
+  background-image: none;
+}
+.order-button-requested.order-button-focus,
+.order-button-requested:focus,
+.order-button-requested:hover,
+.order-button-requested:hover:active,
+.order-button-approved.order-button-focus,
+.order-button-approved:focus,
+.order-button-approved:hover,
+.order-button-approved:hover:active {
+  border-color: #1BE300 ;
+}
+.order-button-requested:active,
+.order-button-approved:active {
+  border-color: #1BE300 ;
+}
+.order-button-requested .order-button-text,
+.order-button-approved .order-button-text {
+  font-weight: 700;
+  color: #fff;
+}
+.order-button-requested.order-button-disabled .order-button-text {
+  color: a_nullable_with_important();
+}
+.order-button-requested .order-button-inner, 
+.order-button-approved .order-button-inner {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+
+.order-button-oneclick {
+  background: #ed9220;
+  border-color: #ca7c1b #be751a #a56616;
+}
+.order-button-oneclick .order-button-inner {
+  background: #f2ad58;
+  background: -webkit-linear-gradient(top, #f6c88f, #ed9220);
+  background: linear-gradient(to bottom, #f6c88f, #ed9220);
+}
+.order-button-oneclick:hover .order-button-inner {
+  background: #eba145;
+  background: -webkit-linear-gradient(top, #f4bc77, #e18512);
+  background: linear-gradient(to bottom, #f4bc77, #e18512);
+}
+.order-button-oneclick:active .order-button-inner {
+  background-color: #ed9220;
+  background-image: none;
+}
+.order-button-oneclick.order-button-focus,
+.order-button-oneclick:focus,
+.order-button-oneclick:hover,
+.order-button-oneclick:hover:active {
+  border-color: #be751a #b26d18 #9a5f15;
+}
+.order-button-oneclick:active {
+  border-color: #ca7c1b #be751a #be751a;
+}
+.order-button-oneclick.order-button-disabled .order-button-text {
+  color: a_nullable_with_important();
+}
+.order-button-preorder {
+  background: #cdcda1;
+  border-color: #8f8f70 #858569 #717158;
+}
+.order-button-preorder .order-button-inner {
+  background: #dadab9;
+  background: -webkit-linear-gradient(top, #e6e6d0, #cdcda1);
+  background: linear-gradient(to bottom, #e6e6d0, #cdcda1);
+}
+.order-button-preorder:hover .order-button-inner {
+  background: #d1d1a8;
+  background: -webkit-linear-gradient(top, #ddddbf, #c4c490);
+  background: linear-gradient(to bottom, #ddddbf, #c4c490);
+}
+.order-button-preorder:active .order-button-inner {
+  background-color: #cdcda1;
+  background-image: none;
+}
+.order-button-preorder.order-button-focus,
+.order-button-preorder:focus,
+.order-button-preorder:hover,
+.order-button-preorder:hover:active {
+  border-color: #858569 #7b7b61 #666650;
+}
+.order-button-preorder:active {
+  border-color: #8f8f70 #858569 #858569;
+}
+.order-button-preorder.order-button-disabled .order-button-text {
+  color: a_nullable_with_important();
+}
+.order-button-supplemental .order-button-text {
+  text-align: left;
+  z-index: 10;
+  padding-right: 23px;
+}
+.order-button-supplemental {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  margin-top: -6px;
+}
+.order-button-span1 {
+  width: 8% !important;
+}
+.order-button-span2 {
+  width: 17% !important;
+}
+.order-button-span3 {
+  width: 25% !important;
+}
+.order-button-span4 {
+  width: 33% !important;
+}
+.order-button-span5 {
+  width: 42% !important;
+}
+.order-button-span6 {
+  width: 50% !important;
+}
+.order-button-span7 {
+  width: 58% !important;
+}
+.order-button-span8 {
+  width: 67% !important;
+}
+.order-button-span9 {
+  width: 75% !important;
+}
+.order-button-span10 {
+  width: 83% !important;
+}
+.order-button-span11 {
+  width: 92% !important;
+}
+.order-button-span12 {
+  width: 100% !important;
+}
+.order-button-group {
+  display: table;
+  font-size: 0;
+  line-height: 0;
+  outline: 0;
+  position: relative;
+  white-space: nowrap;
+}
+.order-button-group .order-button {
+  border-radius: 0;
+  border: 1px solid;
+  border-color: #adb1b8 #a2a6ac #8d9096;
+  border-left-width: 0;
+  vertical-align: top;
+  display: table-cell;
+  width: auto;
+}
+.order-button-group .order-button:after {
+  border-radius: 0;
+}
+.order-button-group .order-button .order-button-text {
+  white-space: nowrap;
+}
+.order-button-group .order-button .order-button-inner {
+  border-radius: 0;
+}
+.order-button-group .order-button:hover {
+  border-color: #a2a6ac #979aa1 #82858a;
+}
+.order-button-group .order-button:active {
+  border-color: #adb1b8 #a2a6ac #a2a6ac;
+}
+.order-button-group .order-button.order-button-focus,
+.order-button-group .order-button:focus {
+  box-shadow: 0 0 3px 2px rgba(228, 121, 17, 0.5);
+  outline: 0;
+  z-index: 1;
+  border-color: #e77600;
+}
+.order-button-group .order-button .order-button-group-first,
+.order-button-group .order-button:first-child {
+  border-radius: 3px 0 0 3px;
+  border-left-width: 1px;
+}
+.order-button-group .order-button .order-button-group-first .order-button-inner,
+.order-button-group .order-button:first-child .order-button-inner {
+  border-radius: 3px 0 0 3px;
+}
+.order-button-group .order-button .order-button-group-last,
+.order-button-group .order-button:last-child {
+  border-radius: 0 3px 3px 0;
+}
+.order-button-group .order-button .order-button-group-last .order-button-inner,
+.order-button-group .order-button:last-child .order-button-inner {
+  border-radius: 0 3px 3px 0;
+}
+.order-button-group .order-button:only-child {
+  border-radius: 3px;
+}
+.order-button-group .order-button:only-child .order-button-inner {
+  border-radius: 3px;
+}
+.order-button-group .order-button-selected {
+  border-color: #adb2bb #bababa #bababa;
+  position: relative;
+  overflow: visible;
+}
+.order-button-group .order-button-selected .order-button-inner {
+  background-image: none;
+  background-color: #767676;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+}
+.order-button-group .order-button-selected .order-button-inner .order-button-text {
+  color: #fff;
+}
+.a-text-center .order-button-group {
+  margin-left: auto;
+  margin-right: auto;
+}
+.order-button-stack .order-button {
+  margin-bottom: 10px;
+  display: block;
+}
+.order-button-stack .order-button:last-child {
+  margin-bottom: 0;
+}
+.order-button-stack .order-button-list .order-button {
+  display: inline-block;
+}
+.order-button-stack .order-button-group {
+  width: 100%;
+}
+.order-button-stack .order-button-group .order-button {
+  margin-bottom: 0;
+  width: auto;
+  display: table-cell;
+}
+.order-button-stack .order-button + .order-button {
+  margin-left: 0;
+}
+.order-button-stack .order-button-toggle.order-button-thumbnail {
+  display: inline-block;
+}
+/* ******** */

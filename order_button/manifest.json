@@ -1,0 +1,20 @@
+{
+  "name": "Order Button",
+  "version": "1.1",
+  "manifest_version": 2,
+  "description": "Detects an Amazon product page and creates a button to request ordering the product",
+  "permissions": ["storage"],
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "css": ["order-button.css"],
+      "matches": ["https://*.amazon.com/*"],
+      "js": ["content_script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    "phoenix.js",
+    "socket.js"
+  ]
+}
