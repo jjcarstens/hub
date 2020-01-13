@@ -1,7 +1,7 @@
 defmodule HubContext.Users do
   import Ecto.Query
 
-  alias HubContext.Schema.{Selection, User}
+  alias HubContext.Schema.{Order, Selection, User}
   alias HubContext.Repo
 
   def by_email(nil), do: nil
@@ -12,6 +12,12 @@ defmodule HubContext.Users do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert
+  end
+
+  def create_order(%User{id: user_id}, attrs) do
+    Map.put(attrs, "user_id", user_id)
+    |> Order.changeset()
+    |> Repo.insert()
   end
 
   def eligible_for_type(type) do

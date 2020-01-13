@@ -2,12 +2,17 @@ defmodule HubContext.Schema.User do
   use HubContext, :schema
 
   defenum(FrameLocation, top_left: 1, top_mid_left: 2, top_mid_right: 3, top_right: 4, bottom_left: 5, bottom_mid: 6, bottom_right: 7)
+  defenum(Role, :user_role, [:admin, :user])
 
   schema "users" do
+    has_many(:orders, HubContext.Schema.Order)
     has_many(:selections, HubContext.Schema.Selection)
+    has_many(:transactions, through: [:orders, :transaction])
 
+    field :card_number, :string
     field(:color, {:array, :integer}, default: [Enum.random(0..255),Enum.random(0..255),Enum.random(0..255)])
     field(:email, :string)
+    field :encrypted_pin, :string
     field(:eligible_selection_types, {:array, HubContext.Schema.Selection.Type})
     field(:facebook_id, :string)
     field(:first_name, :string)
@@ -15,6 +20,7 @@ defmodule HubContext.Schema.User do
     field(:image, :string)
     field(:last_name, :string)
     field(:nickname, :string)
+    field :role, Role, default: :user
 
     timestamps()
   end
