@@ -36,6 +36,7 @@ defmodule HubWeb.MixProject do
       {:distillery, "~> 2.0"},
       {:drab, "~> 0.10"},
       {:ecto_sql, "~> 3.0"},
+      {:floki, "0.23.1"},
       {:gettext, "~> 0.11"},
       {:hub_api, path: "hub_api"},
       {:hub_context, path: "hub_context"},
