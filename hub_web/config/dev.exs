@@ -5,6 +5,12 @@ config :hub_api, auth: false
 config :hub_api, HubApi.Endpoint,
   url: [host: "localhost"],
   http: [port: System.get_env("API_PORT") || 4080],
+  https: [
+    port: 4081,
+    certfile: "priv/cert/selfsigned.pem",
+    keyfile: "priv/cert/selfsigned_key.pem"
+  ],
+  check_origin: false,
   code_reloader: false
 
 # Configure the DB
@@ -28,12 +34,13 @@ config :hub_web, HubWeb.Endpoint,
     certfile: "priv/cert/selfsigned.pem",
     keyfile: "priv/cert/selfsigned_key.pem"
   ],
+  live_view: [signing_salt: "PjIr8lUTid+v0D148gzjnYq02nD1RGwZ"],
   live_reload: [
     patterns: [
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{lib/hub_web/views/.*(ex)$},
-      ~r{lib/hub_web/templates/.*(eex|drab)$}
+      ~r{lib/hub_web/templates/.*(eex|leex)$}
     ]
   ],
   watchers: [

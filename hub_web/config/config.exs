@@ -40,16 +40,4 @@ config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
   client_id: "173944326601803",
   client_secret: "c9856440130814aa030f0eb57d556d06"
 
-# Configures Drab
-config :drab, HubWeb.Endpoint,
-  otp_app: :hub_web
-
-# Configures default Drab file extension
-config :phoenix, :template_engines,
-  drab: Drab.Live.Engine
-
-# Configures Drab for webpack
-config :drab, HubWeb.Endpoint,
-  js_socket_constructor: "window.__socket"
-
 import_config "#{Mix.env()}.exs"

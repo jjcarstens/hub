@@ -2,6 +2,7 @@ defmodule HubApi.OrderChannel do
   use HubApi, :channel
 
   alias HubContext.{Repo, Schema.User, Users}
+  alias Phoenix.PubSub
 
   def join("orders:" <> first_name, %{"link" => link}, socket) do
     case Repo.get_by(User, first_name: first_name) do
@@ -26,9 +27,11 @@ defmodule HubApi.OrderChannel do
     # TODO: Broadcast this so scene can be displayed
     case Users.create_order(socket.assigns.user, payload) do
       {:ok, order} ->
+        PubSub.broadcast_from!(LAN, self(), "orders:created", order)
+
         {:reply, {:ok, %{order_status: order.status}}, socket}
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         {:reply, {:error, %{order_status: "error", msg: "failed to create order"}}, socket}
     end
   end

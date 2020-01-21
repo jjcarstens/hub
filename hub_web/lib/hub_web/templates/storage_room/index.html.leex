@@ -1,0 +1,17 @@
+<section class="phx-hero">
+  <h1>Lights:
+  <%= if @lights_waiting do %>
+    <img class="loader"/>
+  <% else %>
+    <%= @lights_state %>
+  <% end %>
+  </h1><button phx-click="toggle_lights">Toggle Lights</button>
+
+  <h1>Lock:
+    <%= if @lock_waiting do %>
+      <img class="loader"/>
+    <% else %>
+      <%= @lock_state %>
+    <% end %>
+  </h1> <button phx-click="toggle_lock">Toggle Lock</button>
+</section>
