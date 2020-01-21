@@ -7,7 +7,7 @@ import {Socket} from './phoenix.js';
     cartButton: document.querySelector("#addToCart_feature_div,#addToCartDiv"),
     channel: null,
     user: document.getElementById("current-user").getAttribute("value"),
-    socket: new Socket("ws://10.0.1.7:4080/socket", {params: {}}),
+    socket: new Socket("wss://10.0.1.7:4081/socket", {params: {}}),
     orderStatus: null
   }
 
