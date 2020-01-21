@@ -5,7 +5,8 @@ defmodule Atm.Application do
 
   def start(_type, _args) do
     children = [
-      Atm.Magstripe
+      Atm.Magstripe,
+      {Phoenix.PubSub.PG2, name: LAN}
     ] ++ children_for(@target)
 
     opts = [strategy: :one_for_one, name: Atm.Supervisor]

@@ -44,6 +44,8 @@ defmodule Genie.MixProject do
       {:nerves, "~> 1.4", runtime: false},
       {:nerves_hub, "~> 0.1"},
       {:nerves_runtime, "~> 0.8"},
+      {:pbx, path: "../pbx"},
+      {:phoenix_pubsub, "~> 1.1"},
       {:shoehorn, "~> 0.4"},
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},

@@ -28,9 +28,15 @@ config :hub_context,
 
 config :hub_web, HubWeb.Endpoint,
   server: true,
-  code_reloader: false
+  code_reloader: false,
+  http: [port: 80],
+  https: [port: 443]
 
 config :hub_web, auth: false
+
+if Mix.target() != :host do
+  config :tzdata, :data_dir, "/root/tzdata"
+end
 
 # Setup of mocking and loading of Nerves to be able to run on host
 if Mix.target() == :host do

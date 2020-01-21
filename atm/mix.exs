@@ -37,10 +37,11 @@ defmodule Atm.MixProject do
       # Dependencies for all targets
       {:input_event, "~> 0.4"},
       {:nerves, "~> 1.5.0", runtime: false},
+      {:pbx, path: "../pbx"},
+      {:phoenix_pubsub, "~> 1.1"},
       {:shoehorn, "~> 0.6"},
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
-      {:scenic, "~> 0.10"},
       {:scenic_sensor, "~> 0.7"},
 
       # Dependencies for only the :host
