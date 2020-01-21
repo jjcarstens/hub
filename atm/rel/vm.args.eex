@@ -4,8 +4,8 @@
 ##  The cookie needs to be configured prior to vm boot for
 ##  for read only filesystem.
 
--sname atm
--setcookie <%= @release.options[:cookie] %>
+-name banker@10.0.1.38
+-setcookie <%= :genie_cookie || @release.options[:cookie] %>
 
 ## Use Ctrl-C to interrupt the current shell rather than invoking the emulator's
 ## break handler and possibly exiting the VM.

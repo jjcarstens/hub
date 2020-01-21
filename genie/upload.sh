@@ -38,7 +38,7 @@ help() {
     exit 1
 }
 
-[ -n "$DESTINATION" ] || DESTINATION=nerves.local
+[ -n "$DESTINATION" ] || DESTINATION=lamp.local
 [ -n "$MIX_TARGET" ] || MIX_TARGET=rpi0
 [ -n "$MIX_ENV" ] || MIX_ENV=dev
 if [ -z "$FILENAME" ]; then
