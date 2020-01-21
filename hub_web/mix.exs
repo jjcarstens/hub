@@ -34,7 +34,6 @@ defmodule HubWeb.MixProject do
   defp deps do
     [
       {:distillery, "~> 2.0"},
-      {:drab, "~> 0.10"},
       {:ecto_sql, "~> 3.0"},
       {:floki, "0.23.1"},
       {:gettext, "~> 0.11"},
@@ -46,6 +45,7 @@ defmodule HubWeb.MixProject do
       {:phoenix_ecto, "~> 4.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_view, "~> 0.5.1"},
       {:phoenix_pubsub, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},

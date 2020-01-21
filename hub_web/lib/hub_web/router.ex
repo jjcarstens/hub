@@ -5,6 +5,7 @@ defmodule HubWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug Phoenix.LiveView.Flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug HubWeb.Auth
@@ -17,11 +18,14 @@ defmodule HubWeb.Router do
   scope "/", HubWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", HomeLive, session: ["user_id"]
+    live "/admin", AdminLive, session: ["user_id"]
+    live "/storage_room", StorageRoomLive
+    live "/transaction/new", TransactionLive.New
+
     get "/login", AuthController, :login
     get "/logout", AuthController, :logout
     get "/privacy_policy", AuthController, :privacy_policy
-    get "/storage_room", StorageRoomController, :index
   end
 
   scope "/auth", HubWeb do

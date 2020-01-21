@@ -1,0 +1,6 @@
+<h1>howdy</h1>
+<button phx-click="test">Testing</button>
+
+<%= if @socket.assigns[:current_user] do %>
+  <%= inspect(@current_user) %>
+<% end %>

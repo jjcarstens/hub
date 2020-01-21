@@ -4,6 +4,8 @@ defmodule HubContext.Users do
   alias HubContext.Schema.{Order, Selection, User}
   alias HubContext.Repo
 
+  def all(), do: Repo.all(User)
+
   def by_email(nil), do: nil
   def by_email(""), do: nil
   def by_email(email), do: Repo.get_by(User, email: email)
@@ -37,6 +39,7 @@ defmodule HubContext.Users do
     end
   end
 
+  def get_by_id(nil), do: nil
   def get_by_id(user_id), do: Repo.get(User, user_id)
 
   def update(%User{} = user, attrs) do

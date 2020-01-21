@@ -1,6 +1,6 @@
 defmodule HubWeb.UserSocket do
   use Phoenix.Socket
-  use Drab.Socket
+  # use Drab.Socket
 
   ## Channels
   # channel "room:*", HubWeb.RoomChannel

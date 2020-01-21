@@ -21,20 +21,20 @@ defmodule HubWeb.StorageRoom do
   end
 
   def read_lock do
-    Phoenix.PubSub.broadcast(HubWeb.PubSub, @topic, {:read, :lock})
+    Phoenix.PubSub.broadcast_from(HubWeb.PubSub, self(), @topic, {:read, :lock})
   end
 
   def read_lights do
-    Phoenix.PubSub.broadcast(HubWeb.PubSub, @topic, {:read, :lights})
+    Phoenix.PubSub.broadcast_from(HubWeb.PubSub, self(), @topic, {:read, :lights})
   end
 
   def toggle_lock(val) when valid_value(val) do
-    Phoenix.PubSub.broadcast(HubWeb.PubSub, @topic, {:toggle, :lock, val})
+    Phoenix.PubSub.broadcast_from(HubWeb.PubSub, self(), @topic, {:toggle, :lock, val})
   end
   def toggle_lock(_val), do: :bad_toggle_value
 
   def toggle_lights(val) when valid_value(val) do
-    Phoenix.PubSub.broadcast(HubWeb.PubSub, @topic, {:toggle, :lock, val})
+    Phoenix.PubSub.broadcast_from(HubWeb.PubSub, self(), @topic, {:toggle, :lights, val})
   end
   def toggle_lights(_val), do: :bad_toggle_value
 end

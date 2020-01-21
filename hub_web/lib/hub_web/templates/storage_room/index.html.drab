@@ -1,4 +1,0 @@
-<section class="phx-hero">
-  <h1>Lights: <%= @lights_state %></h1> <button drab-click="toggle_lights">Toggle Lights</button>
-  <h1>Lock: <%= @lock_state %></h1> <button drab-click="toggle_lock">Toggle Lock</button>
-</section>
