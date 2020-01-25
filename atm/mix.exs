@@ -43,6 +43,7 @@ defmodule Atm.MixProject do
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
       {:scenic_sensor, "~> 0.7"},
+      {:scenic_live_reload, "~> 0.2", only: :dev, targets: :host},
 
       # Dependencies for only the :host
       {:scenic_driver_glfw, "~> 0.10", targets: :host},
@@ -61,7 +62,7 @@ defmodule Atm.MixProject do
       {:nerves_system_rpi3a, "~> 1.8", runtime: false, targets: :rpi3a},
       {:nerves_system_rpi4, "~> 1.8", runtime: false, targets: :rpi4},
       {:nerves_system_bbb, "~> 2.3", runtime: false, targets: :bbb},
-      {:nerves_system_x86_64, "~> 1.8", runtime: false, targets: :x86_64},
+      {:nerves_system_x86_64, "~> 1.8", runtime: false, targets: :x86_64}
     ]
   end
 

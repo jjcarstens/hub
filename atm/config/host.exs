@@ -2,9 +2,8 @@ import Config
 
 config :atm, :viewport, %{
   name: :main_viewport,
-  default_scene: {Atm.Scene.Crosshair, nil},
-  size: {800, 480},
-  opts: [scale: 1.0],
+  default_scene: {Atm.Scene.Splash, nil},
+  size: {480, 800},
   drivers: [
     %{
       module: Scenic.Driver.Glfw,
@@ -12,3 +11,7 @@ config :atm, :viewport, %{
     }
   ]
 }
+
+config :exsync,
+  reload_timeout: 75,
+  reload_callback: {ScenicLiveReload, :reload_current_scene, []}
