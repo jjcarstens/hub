@@ -4,10 +4,13 @@ defmodule Atm.Application do
   use Application
 
   def start(_type, _args) do
-    children = [
-      Atm.Magstripe,
-      {Phoenix.PubSub.PG2, name: LAN}
-    ] ++ children_for(@target)
+    children =
+      [
+        {Scenic.Sensor, nil},
+        Atm.Magstripe,
+        Atm.Session,
+        {Phoenix.PubSub.PG2, name: LAN}
+      ] ++ children_for(@target)
 
     opts = [strategy: :one_for_one, name: Atm.Supervisor]
     Supervisor.start_link(children, opts)
@@ -17,7 +20,8 @@ defmodule Atm.Application do
     main_viewport_config = Application.get_env(:atm, :viewport)
 
     [
-      {Scenic, viewports: [main_viewport_config]}
+      {Scenic, viewports: [main_viewport_config]},
+      {ScenicLiveReload, viewports: [main_viewport_config]}
     ]
   end
 

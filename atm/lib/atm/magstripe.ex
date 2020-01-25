@@ -1,9 +1,12 @@
 defmodule Atm.Magstripe do
   use GenServer
 
+  alias Scenic.Sensor
+
   require Logger
 
   @device_name "HID c216:0180"
+  @sensor_id :magstripe
 
   def start_link(args \\ []) do
     GenServer.start_link(__MODULE__, args, name: __MODULE__)
@@ -11,9 +14,11 @@ defmodule Atm.Magstripe do
 
   @impl true
   def init(_args) do
-    send self(), :find
+    Sensor.register(@sensor_id, "0.1.0", "Magstripe readings")
 
-    {:ok, %{input_event: nil, events: [], last_read: "", path: nil}}
+    send(self(), :find)
+
+    {:ok, %{input_event: nil, events: [1], last_read: "", path: nil, status: :initializing}}
   end
 
   @impl true
@@ -27,10 +32,22 @@ defmodule Atm.Magstripe do
         # Dont want remove USB to crash us
         Process.unlink(input_event)
 
-        {:noreply, %{state | input_event: input_event, path: path}}
+        Sensor.publish(@sensor_id, %{status: :ready})
+
+        {:noreply, %{state | input_event: input_event, path: path, status: :ready}}
+
       _ ->
         # Keep waiting for device to be plugged in
         reschedule()
+
+        state =
+          if state.status != :no_reader do
+            Sensor.publish(@sensor_id, %{status: :no_reader})
+            %{state | status: :no_reader}
+          else
+            state
+          end
+
         {:noreply, state}
     end
   end
@@ -41,10 +58,16 @@ defmodule Atm.Magstripe do
     {:noreply, %{state | input_event: nil, path: nil}}
   end
 
-  def handle_info({:input_event, path, [_msc, {:ev_key, :key_enter, _}]}, %{path: path, events: events} = state) when length(events) > 0 do
+  def handle_info(
+        {:input_event, path, [_msc, {:ev_key, :key_enter, _}]},
+        %{path: path, events: events} = state
+      )
+      when length(events) > 0 do
     last_read = parse_events(events)
-    # TODO: Brodcast this elsewhere knows about the mag swipe
-    {:noreply, %{state | events: [], last_read: last_read}}
+    # TODO: Lookup card from DB
+    Sensor.publish(@sensor_id, %{card: last_read})
+
+    {:noreply, %{state | events: [1], last_read: last_read}}
   end
 
   def handle_info({:input_event, path, events}, %{path: path} = state) do
@@ -90,7 +113,6 @@ defmodule Atm.Magstripe do
   end
 
   defp reschedule() do
-    Logger.debug("[Magstripe] - No Magstripe connected. Rescheduling ")
     Process.send_after(self(), :find, 2_000)
   end
 
