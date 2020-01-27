@@ -16,7 +16,7 @@ defmodule Genie.StorageRelay do
 
   @impl true
   def init(state) do
-    send self(), :init
+    send(self(), :init)
     {:ok, state}
   end
 
@@ -68,6 +68,6 @@ defmodule Genie.StorageRelay do
 
   defp send_update(update) do
     Phoenix.PubSub.broadcast(HubWeb.PubSub, "nerves:storage_room", update)
-    send Genie.Websocket, update
+    send(Genie.Websocket, update)
   end
 end

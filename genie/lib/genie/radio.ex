@@ -3,7 +3,7 @@ defmodule Genie.Radio do
 
   def fan_light() do
     file_path("fan_light.iq")
-    |> Replex.replay(433907740, sample_rate: 250_000)
+    |> Replex.replay(433_907_740, sample_rate: 250_000)
   end
 
   def fan_speed(speed) do
@@ -11,9 +11,10 @@ defmodule Genie.Radio do
       x when is_integer(x) ->
         # potentially need 4.3393e8 freq
         file_path("fan_#{x}")
-        |> blast_it(433907740, sample_rate: 250_000)
+        |> blast_it(433_907_740, sample_rate: 250_000)
 
-      err -> err
+      err ->
+        err
     end
   end
 
@@ -29,6 +30,7 @@ defmodule Genie.Radio do
 
   defp blast_it(recording, freq, opts) do
     repeat = opts[:repeat] || 3
+
     task =
       Task.async(fn ->
         Enum.map(1..repeat, fn _ -> Replex.replay(recording, freq, opts) end)
@@ -39,6 +41,7 @@ defmodule Genie.Radio do
 
   defp convert_fan_speed(speed) do
     str = to_string(speed)
+
     cond do
       str =~ ~r/off|0/ -> 0
       str =~ ~r/low|1/ -> 1

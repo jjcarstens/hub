@@ -61,7 +61,7 @@ defmodule Genie.MixProject do
       # Dependencies for specific targets
       {:nerves_system_rpi3a, "~> 1.6", runtime: false, targets: :rpi3a},
       {:nerves_system_rpi3, "~> 1.6", runtime: false, targets: :rpi3},
-      {:nerves_system_rpi0, "~> 1.6", runtime: false, targets: :rpi0},
+      {:nerves_system_rpi0, "~> 1.6", runtime: false, targets: :rpi0}
     ]
   end
 
