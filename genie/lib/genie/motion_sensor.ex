@@ -2,7 +2,7 @@ defmodule Genie.MotionSensor do
   use GenServer
   require Logger
 
-  defguard is_false_trigger(current, past) when is_nil(past) or ((current - past)/1.0e9) < 3
+  defguard is_false_trigger(current, past) when is_nil(past) or (current - past) / 1.0e9 < 3
 
   defstruct pin: nil, last_timestamp: nil, options: nil, ignore: nil
 
@@ -13,7 +13,7 @@ defmodule Genie.MotionSensor do
 
   @impl true
   def init(state) do
-    send self(), :init
+    send(self(), :init)
     {:ok, state}
   end
 

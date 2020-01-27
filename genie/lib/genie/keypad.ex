@@ -3,8 +3,7 @@ defmodule Genie.Keypad do
 
   require Logger
 
-  @jonjon_code "2486"
-  @stephanie_code "2424"
+  alias Genie.AccessCodes
 
   @impl true
   def handle_keypress(key, %{input: ""} = state) do
@@ -24,18 +23,7 @@ defmodule Genie.Keypad do
 
   @impl true
   def handle_keypress("D", %{input: input} = state) do
-    # Treat D as Enter
-    case input do
-      @jonjon_code ->
-        Logger.info("ACCEPTED: jonjon_code")
-        Genie.toggle_lock(:unlocked)
-      @stephanie_code ->
-        Logger.info("ACCEPTED: stephanie_code")
-        Genie.toggle_lock(:unlocked)
-      _ ->
-        # no good
-        :ok
-    end
+    if AccessCodes.valid?(input), do: Genie.toggle_lock(:unlocked)
 
     # Pass on D. May be holding it to reset lights and lock
     %{state | input: input <> "D"}

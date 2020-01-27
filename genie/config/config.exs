@@ -47,7 +47,8 @@ if Mix.target() == :host do
     "nerves_fw_active" => "a",
     "a.nerves_fw_uuid" => "924d4d6c-c4c5-50c3-aee8-1f6975ecec87",
     "a.nerves_fw_product" => "genie_hub",
-    "a.nerves_fw_architecture" => "arm", # arm?
+    # arm?
+    "a.nerves_fw_architecture" => "arm",
     "a.nerves_fw_version" => "0.2.0",
     "a.nerves_fw_platform" => "arm",
     "a.nerves_fw_misc" => "extra comments",
