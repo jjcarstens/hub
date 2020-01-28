@@ -19,9 +19,8 @@ defmodule HubWeb.AdminLive do
 
   defp validate_admin(socket) do
     {:ok,
-    socket
-    |> put_flash(:error, "Unauthorized - Must be an admin")
-    |> redirect(to: "/")
-  }
+     socket
+     |> put_flash(:error, "Unauthorized - Must be an admin")
+     |> redirect(to: "/")}
   end
 end

@@ -31,10 +31,12 @@ defmodule HubWeb.StorageRoom do
   def toggle_lock(val) when valid_value(val) do
     Phoenix.PubSub.broadcast_from(HubWeb.PubSub, self(), @topic, {:toggle, :lock, val})
   end
+
   def toggle_lock(_val), do: :bad_toggle_value
 
   def toggle_lights(val) when valid_value(val) do
     Phoenix.PubSub.broadcast_from(HubWeb.PubSub, self(), @topic, {:toggle, :lights, val})
   end
+
   def toggle_lights(_val), do: :bad_toggle_value
 end

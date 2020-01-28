@@ -12,6 +12,7 @@ defmodule HubWeb.TransactionLive.New do
       socket
       |> assign(:changeset, Transactions.changeset(%{}))
       |> assign(:users, users_list())
+
     {:ok, socket}
   end
 
@@ -32,7 +33,7 @@ defmodule HubWeb.TransactionLive.New do
           |> redirect(to: "/admin")
 
         {:stop, socket}
-        
+
       {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
@@ -40,6 +41,6 @@ defmodule HubWeb.TransactionLive.New do
 
   defp users_list() do
     HubContext.Users.all()
-    |> Enum.map(& {"#{&1.first_name}", &1.id})
+    |> Enum.map(&{"#{&1.first_name}", &1.id})
   end
 end

@@ -6,7 +6,9 @@ defmodule HubWeb.HomeLive do
   end
 
   def mount(session, socket) do
-    socket = assign_new(socket, :current_user, fn -> HubContext.Users.get_by_id(session["user_id"]) end)
+    socket =
+      assign_new(socket, :current_user, fn -> HubContext.Users.get_by_id(session["user_id"]) end)
+
     {:ok, socket}
   end
 
