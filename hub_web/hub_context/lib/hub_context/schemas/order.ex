@@ -3,14 +3,15 @@ defmodule HubContext.Schema.Order do
 
   alias HubContext.Schema.{Transaction, User}
 
-  defenum Status, :order_status, [:requested, :approved, :denied]
+  defenum Status, :order_status, [:created, :requested, :approved, :denied]
 
   schema "orders" do
     belongs_to(:user, User)
     has_one(:transaction, Transaction)
+    has_one(:card, through: [:user, :card])
 
     field :link, :string
-    field :status, Status, default: :requested
+    field :status, Status, default: :created
 
     timestamps()
   end

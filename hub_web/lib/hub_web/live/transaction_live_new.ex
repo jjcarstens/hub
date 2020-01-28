@@ -7,7 +7,7 @@ defmodule HubWeb.TransactionLive.New do
     Phoenix.View.render(HubWeb.TransactionView, "new.html", assigns)
   end
 
-  def mount(session, socket) do
+  def mount(_session, socket) do
     socket =
       socket
       |> assign(:changeset, Transactions.changeset(%{}))
@@ -26,7 +26,7 @@ defmodule HubWeb.TransactionLive.New do
 
   def handle_event("save", %{"transaction" => params}, socket) do
     case Transactions.create(params) do
-      {:ok, transaction} ->
+      {:ok, _transaction} ->
         socket =
           socket
           |> put_flash(:info, "transaction created")
