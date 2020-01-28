@@ -14,11 +14,9 @@ defmodule Atm.Magstripe do
 
   @impl true
   def init(_args) do
-    Sensor.register(@sensor_id, "0.1.0", "Magstripe readings")
-
     send(self(), :find)
 
-    {:ok, %{input_event: nil, events: [1], last_read: "", path: nil, status: :initializing}}
+    {:ok, %{input_event: nil, events: [], last_read: "", path: nil, status: :initializing}}
   end
 
   @impl true
@@ -32,8 +30,6 @@ defmodule Atm.Magstripe do
         # Dont want remove USB to crash us
         Process.unlink(input_event)
 
-        Sensor.publish(@sensor_id, %{status: :ready})
-
         {:noreply, %{state | input_event: input_event, path: path, status: :ready}}
 
       _ ->
@@ -42,7 +38,6 @@ defmodule Atm.Magstripe do
 
         state =
           if state.status != :no_reader do
-            Sensor.publish(@sensor_id, %{status: :no_reader})
             %{state | status: :no_reader}
           else
             state
@@ -64,10 +59,10 @@ defmodule Atm.Magstripe do
       )
       when length(events) > 0 do
     last_read = parse_events(events)
-    # TODO: Lookup card from DB
-    Sensor.publish(@sensor_id, %{card: last_read})
 
-    {:noreply, %{state | events: [1], last_read: last_read}}
+    Phoenix.PubSub.broadcast_from!(LAN, self(), "magstripe", {:magstripe, last_read})
+
+    {:noreply, %{state | events: [], last_read: last_read}}
   end
 
   def handle_info({:input_event, path, events}, %{path: path} = state) do

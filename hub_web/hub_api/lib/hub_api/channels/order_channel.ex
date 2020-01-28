@@ -1,7 +1,7 @@
 defmodule HubApi.OrderChannel do
   use HubApi, :channel
 
-  alias HubContext.{Repo, Schema.User, Users}
+  alias HubContext.{Repo, Orders, Schema.User, Users}
   alias Phoenix.PubSub
 
   def join("orders:" <> first_name, %{"link" => link}, socket) do
@@ -11,7 +11,9 @@ defmodule HubApi.OrderChannel do
       user ->
         user = Repo.preload(user, :orders)
 
-        order = Enum.find(user.orders, %{status: "new"}, &(link =~ &1.link or &1.link =~ link))
+        asin = Orders.asin(link)
+
+        order = Enum.find(user.orders, %{status: "new"}, &Orders.asin(&1) == asin)
 
         {:ok, %{order_status: order.status}, assign(socket, :user, user)}
     end

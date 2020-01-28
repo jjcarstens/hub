@@ -1,7 +1,7 @@
 defmodule Atm.Session do
   use GenServer
 
-  alias Scenic.Sensor
+  alias HubContext.Schema.{Order}
 
   @sys_brightness "/sys/class/backlight/rpi_backlight/brightness"
   @sys_backlight "/sys/class/backlight/rpi_backlight/bl_power"
@@ -14,6 +14,8 @@ defmodule Atm.Session do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
+  def current_user(), do: GenServer.call(__MODULE__, :current_user)
+
   def set_brightness(brightness) do
     GenServer.call(__MODULE__, {:set_brightness, brightness})
   end
@@ -25,8 +27,6 @@ defmodule Atm.Session do
   def set_timeout(timeout) do
     GenServer.call(__MODULE__, {:set_timeout, timeout})
   end
-
-  def user(), do: GenServer.call(__MODULE__, :user)
 
   @doc """
   Tick the monitor keep-alive
@@ -53,7 +53,7 @@ defmodule Atm.Session do
     {:reply, :ok, %{state | timeout: timeout}, timeout}
   end
 
-  def handle_call(:user, _from, state) do
+  def handle_call(:current_user, _from, state) do
     {:reply, state.current_user, state, state.timeout}
   end
 
@@ -76,18 +76,19 @@ defmodule Atm.Session do
 
   @impl true
   def handle_continue(:subscribe, state) do
-    Sensor.subscribe(:magstripe)
+    Phoenix.PubSub.subscribe(LAN, "orders:created")
+
     {:noreply, state, state.timeout}
   end
 
   @impl true
-  def handle_info({:sensor, :data, {:magstripe, %{card: card}, _}}, state) do
+  def handle_info(%Order{status: :created} = order, %{current_user: nil} = state) do
     state =
       state
       |> change_backlight(:on)
       |> change_brightness(state.brightness)
 
-    Scenic.ViewPort.set_root(:main_viewport, {Atm.Scene.SecureKeypad, nil})
+    Scenic.ViewPort.set_root(:main_viewport, {Atm.Scene.OrderSplash, order})
 
     {:noreply, state, state.timeout}
   end
@@ -109,7 +110,7 @@ defmodule Atm.Session do
     {:noreply, %{state | dimmed: true}, 15_000}
   end
 
-  def handle_info(msg, state) do
+  def handle_info(_msg, state) do
     {:noreply, state, state.timeout}
   end
 
