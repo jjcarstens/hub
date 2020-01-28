@@ -1,5 +1,5 @@
 defmodule HubContext.Transactions do
-  import Ecto.Query
+  # import Ecto.Query
 
   alias HubContext.Schema.Transaction
   alias HubContext.Repo
