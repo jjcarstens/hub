@@ -8,6 +8,7 @@ import {Socket} from './phoenix.js';
     channel: null,
     user: document.getElementById("current-user").getAttribute("value"),
     socket: new Socket("wss://10.0.1.7:4081/socket", {params: {}}),
+    thumbnail: document.querySelector(".image.itemNo0.selected img").getAttribute("src"),
     orderStatus: null
   }
 
@@ -31,7 +32,7 @@ import {Socket} from './phoenix.js';
 
   function createOrderRequest(e) {
     if (state.orderStatus === "new") {
-      state.channel.push("create_order", {link: window.location.href})
+      state.channel.push("create_order", {link: window.location.href, thumbnail_url: state.thumbnail})
         .receive("ok", updateOrderButton)
         .receive("error", updateOrderButton)
     } else {
@@ -53,6 +54,7 @@ import {Socket} from './phoenix.js';
       case "new":
         innerText = `Request Order for [${state.user}]`
         break;
+      case "created":
       case "requested":
       case "approved":
         innerText = `Order ${order_status} for [${state.user}]`

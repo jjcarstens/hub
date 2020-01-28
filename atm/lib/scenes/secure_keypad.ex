@@ -32,8 +32,13 @@ defmodule Atm.Scene.SecureKeypad do
          |> rect({380, 80}, fill: :blue, id: :result, t: get_t({46, 105}), hidden: true)
          |> text("*", id: :filtered, t: get_t({228, 180}), hidden: true)
 
-  def init(_user, _opts) do
-    {:ok, %{key_presses: [], graph: @graph}, push: @graph}
+  def init(incoming, _opts) do
+    state =
+      incoming
+      |> Map.put(:key_presses, [])
+      |> Map.put(:graph, @graph)
+
+    {:ok, state, push: @graph}
   end
 
   def filter_event({:click, :backspace}, _, state) do
@@ -50,18 +55,31 @@ defmodule Atm.Scene.SecureKeypad do
     |> update_filtered_passcode()
   end
 
+  def handle_info(:redirect, state) do
+    ViewPort.set_root(:main_viewport, {state.redirect, nil})
+    {:noreply, state}
+  end
+
   def handle_input(_input, _context, state) do
     Atm.Session.tick()
 
     {:noreply, state}
   end
 
-  defp check_pin(%{key_presses: keys} = state) do
-    pin = Enum.reverse(keys) |> Enum.join()
+  defp check_pin(%{order: %{user: %{encrypted_pin: pin} = user}, key_presses: keys} = state) do
+    input = Enum.reverse(keys) |> Enum.join()
 
-    color = if pin == "1234", do: :green, else: :red
+    color =
+      if pin == input do
+        maybe_update_order(state.order)
+        Atm.Session.set_user(user)
 
-    # broadcast it passed or failed
+        Process.send_after(self(), :redirect, 2_000)
+
+        :green
+      else
+        :red
+      end
 
     graph =
       state.graph
@@ -81,10 +99,15 @@ defmodule Atm.Scene.SecureKeypad do
 
     graph =
       state.graph
-      |> Graph.delete(:filtered)
       |> Graph.modify(:result, &update_opts(&1, hidden: true))
-      |> text(hidden, id: :filtered, t: get_t({size, 180}))
+      |> Graph.modify(:filtered, &text(&1, hidden, hidden: false, t: get_t({size, 180})))
 
     {:noreply, %{state | graph: graph}, push: graph}
   end
+
+  defp maybe_update_order(%{status: :created} = order) do
+    HubContext.Orders.update(order, %{status: :requested})
+  end
+
+  defp maybe_update_order(_state), do: :ignore
 end

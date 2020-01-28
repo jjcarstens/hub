@@ -3,6 +3,8 @@ defmodule HubContext.Schema.Order do
 
   alias HubContext.Schema.{Transaction, User}
 
+  @amazon_link "https://www.amazon.com/dp/"
+
   defenum Status, :order_status, [:created, :requested, :approved, :denied]
 
   schema "orders" do
@@ -17,14 +19,20 @@ defmodule HubContext.Schema.Order do
     timestamps()
   end
 
+  def asin(%{link: @amazon_link <> asin}), do: asin
+
+  def asin(link) do
+    Regex.run(~r/\/dp\/(.*)(\/|\?)/, link, capture: :all_but_first)
+    |> hd()
+  end
 
   def changeset(attrs) do
     %__MODULE__{}
     |> changeset(attrs)
   end
 
-  def changeset(%__MODULE__{} = transaction, attrs) do
-    transaction
+  def changeset(%__MODULE__{} = order, attrs) do
+    order
     |> cast(attrs, __MODULE__.__schema__(:fields))
     |> validate_required([:user_id])
     |> validate_format(:link, ~r/^http/i)
@@ -32,7 +40,6 @@ defmodule HubContext.Schema.Order do
   end
 
   defp normalize_link(link) do
-    [asin | _] = Regex.run(~r/\/dp\/(.*)\//, link, capture: :all_but_first)
-    "https://www.amazon.com/dp/#{asin}"
+    @amazon_link <> asin(link)
   end
 end

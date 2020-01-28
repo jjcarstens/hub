@@ -35,6 +35,8 @@ defmodule Atm.MixProject do
   defp deps do
     [
       # Dependencies for all targets
+      {:hub_context, path: "../hub_web/hub_context"},
+      {:download, "~> 0.0.4"},
       {:input_event, "~> 0.4"},
       {:nerves, "~> 1.5.0", runtime: false},
       {:pbx, path: "../pbx"},
