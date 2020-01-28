@@ -1,8 +1,7 @@
 defmodule HubWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :hub_web
 
-  socket "/live", Phoenix.LiveView.Socket,
-    websocket: true
+  socket "/live", Phoenix.LiveView.Socket, websocket: true
 
   socket "/socket", HubWeb.UserSocket,
     websocket: true,
@@ -48,7 +47,8 @@ defmodule HubWeb.Endpoint do
     store: :cookie,
     key: "_hub_key",
     signing_salt: "yUEuWAW4",
-    max_age: 60*60*24*30 # 30 days
+    # 30 days
+    max_age: 60 * 60 * 24 * 30
 
   plug HubWeb.Router
 end

@@ -10,6 +10,7 @@ defmodule HubWeb.NervesSocket do
       {:ok, nerves_id} ->
         socket = assign(socket, :nerves_id, nerves_id)
         {:ok, socket}
+
       {:error, _} ->
         :error
     end

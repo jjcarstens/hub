@@ -11,14 +11,16 @@ defmodule HubWeb.Auth do
   def call(%{request_path: "/login"} = conn, _params), do: conn
   def call(%{request_path: "/logout"} = conn, _params), do: conn
   def call(%{request_path: "/privacy_policy"} = conn, _params), do: conn
+
   def call(conn, _params) do
     with true <- Application.get_env(:hub_web, :auth, true),
-         user_id when is_number(user_id) <- get_session(conn, :user_id)
-    do
+         user_id when is_number(user_id) <- get_session(conn, :user_id) do
       assign(conn, :current_user, Users.get_by_id(user_id))
     else
       false ->
-        conn # auth not required
+        # auth not required
+        conn
+
       nil ->
         conn
         |> put_flash(:error, "You must be logged in to view this page")
