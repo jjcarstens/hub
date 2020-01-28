@@ -12,6 +12,7 @@ defmodule HubContext.Schema.Order do
 
     field :link, :string
     field :status, Status, default: :created
+    field :thumbnail_url, :string
 
     timestamps()
   end
@@ -31,7 +32,7 @@ defmodule HubContext.Schema.Order do
   end
 
   defp normalize_link(link) do
-    %{URI.parse(link) | query: nil}
-    |> to_string()
+    [asin | _] = Regex.run(~r/\/dp\/(.*)\//, link, capture: :all_but_first)
+    "https://www.amazon.com/dp/#{asin}"
   end
 end
