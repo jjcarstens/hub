@@ -5,6 +5,7 @@ defmodule HubContext.Schema.User do
   defenum(Role, :user_role, [:admin, :user])
 
   schema "users" do
+    has_one(:cards, HubContext.Schema.Card)
     has_many(:orders, HubContext.Schema.Order)
     has_many(:selections, HubContext.Schema.Selection)
     has_many(:transactions, through: [:orders, :transaction])
