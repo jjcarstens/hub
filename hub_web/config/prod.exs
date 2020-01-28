@@ -19,7 +19,8 @@ config :hub_web, HubWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   server: true,
-  url: [host: System.get_env("HOST")]
+  url: [host: System.get_env("HOST")],
+  live_view: [signing_salt: System.get_env("LIVEVIEW_SIGNING_SALT")]
 
 # Do not print debug messages in production
 config :logger, level: :info
