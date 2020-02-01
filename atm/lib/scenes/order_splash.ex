@@ -90,5 +90,7 @@ defmodule Atm.Scene.OrderSplash do
     [size | _] = Regex.run(~r/\._.*_\.(jpg|jpeg)$/, url, capture: :first)
     new = String.replace(size, ~r/\d+/, "200")
     String.replace(url, size, new)
+  rescue
+    _e -> url
   end
 end

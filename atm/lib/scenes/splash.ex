@@ -22,7 +22,28 @@ defmodule Atm.Scene.Splash do
   def init(_first_scene, _opts) do
     state = %{}
 
+    Phoenix.PubSub.subscribe(LAN, "magstripe")
+
     {:ok, state, push: @graph}
+  end
+
+  @impl true
+  def handle_info({:magstripe, data}, state) do
+    Atm.Session.wake()
+
+    case HubContext.Cards.from_magstripe(data) do
+      nil ->
+        :ignore
+
+      card ->
+        HubContext.Repo.preload(card, :user)
+        |> Map.get(:user)
+        |> Atm.Session.set_user()
+
+        Scenic.ViewPort.set_root(:main_viewport, {Atm.Scene.Dashboard, nil})
+    end
+
+    {:noreply, state}
   end
 
   def handle_input({:cursor_button, {_, :press, _, _}}, _context, state) do
