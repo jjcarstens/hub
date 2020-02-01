@@ -12,9 +12,11 @@ defmodule HubContext.Schema.Order do
     has_one(:transaction, Transaction)
     has_one(:card, through: [:user, :card])
 
+    field :asin, :string
     field :link, :string
     field :status, Status, default: :created
     field :thumbnail_url, :string
+    field :title, :string
 
     timestamps()
   end
@@ -22,7 +24,7 @@ defmodule HubContext.Schema.Order do
   def asin(%{link: @amazon_link <> asin}), do: asin
 
   def asin(link) do
-    Regex.run(~r/\/dp\/(.*)(\/|\?)/, link, capture: :all_but_first)
+    Regex.run(~r/\/dp\/(\w*)(\/|\?|$)/, link, capture: :all_but_first)
     |> hd()
   end
 
@@ -37,6 +39,18 @@ defmodule HubContext.Schema.Order do
     |> validate_required([:user_id])
     |> validate_format(:link, ~r/^http/i)
     |> update_change(:link, &normalize_link/1)
+    |> add_asin()
+    |> unique_constraint(:asin, name: :orders_asin_user_id_index)
+  end
+
+  defp add_asin(changeset) do
+    case get_field(changeset, :asin) do
+      nil ->
+        put_change(changeset, :asin, asin(get_field(changeset, :link)))
+
+      _ ->
+        changeset
+    end
   end
 
   defp normalize_link(link) do
