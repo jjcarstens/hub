@@ -7,7 +7,11 @@ defmodule Atm.Session do
   @sys_backlight "/sys/class/backlight/rpi_backlight/bl_power"
 
   defmodule State do
-    defstruct brightness: 65, current_user: nil, timeout: 45_000, dimmed: false, backlight: :on
+    defstruct brightness: 65,
+              current_user: nil,
+              timeout: 36_000_000,
+              dimmed: false,
+              backlight: :on
   end
 
   def start_link(opts \\ []) do
@@ -28,6 +32,10 @@ defmodule Atm.Session do
     GenServer.call(__MODULE__, {:set_timeout, timeout})
   end
 
+  def wake() do
+    GenServer.call(__MODULE__, :wake)
+  end
+
   @doc """
   Tick the monitor keep-alive
   """
@@ -46,7 +54,8 @@ defmodule Atm.Session do
   end
 
   def handle_call({:set_user, user}, _from, state) do
-    {:reply, :ok, %{state | current_user: user}, state.timeout}
+    user = HubContext.Repo.preload(user, :orders)
+    {:reply, :ok, %{state | current_user: user}}
   end
 
   def handle_call({:set_timeout, timeout}, _from, state) do
@@ -55,6 +64,10 @@ defmodule Atm.Session do
 
   def handle_call(:current_user, _from, state) do
     {:reply, state.current_user, state, state.timeout}
+  end
+
+  def handle_call(:wake, _from, state) do
+    {:reply, :ok, wake(state)}
   end
 
   @impl true
@@ -130,5 +143,11 @@ defmodule Atm.Session do
     end
 
     %{state | brightness: brightness}
+  end
+
+  defp wake(state) do
+    state
+    |> change_backlight(:on)
+    |> change_brightness(state.brightness)
   end
 end
