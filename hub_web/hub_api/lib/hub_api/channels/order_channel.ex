@@ -13,16 +13,30 @@ defmodule HubApi.OrderChannel do
 
         asin = Orders.asin(link)
 
-        order = Enum.find(user.orders, %{status: "new"}, &Orders.asin(&1) == asin)
+        order = Enum.find(user.orders, %{status: "new"}, & &1.asin == asin)
 
         {:ok, %{order_status: order.status}, assign(socket, :user, user)}
-    end
+    end\
   end
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   def handle_in("ping", payload, socket) do
     {:reply, {:ok, payload}, socket}
+  end
+
+  def handle_in("update_order", payload, socket) do
+    Orders.find_by_link(payload)
+    |> Orders.update(payload)
+    |> case do
+      {:ok, order} ->
+        PubSub.broadcast_from!(LAN, self(), "orders:updated", order)
+
+        {:reply, {:ok, %{order_status: order.status}}, socket}
+
+      {:error, _changeset} ->
+        {:reply, {:error, %{order_status: "error", msg: "failed to update order"}}, socket}
+    end
   end
 
   def handle_in("create_order", payload, socket) do
