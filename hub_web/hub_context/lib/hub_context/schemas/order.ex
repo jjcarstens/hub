@@ -12,8 +12,11 @@ defmodule HubContext.Schema.Order do
     has_one(:transaction, Transaction)
     has_one(:card, through: [:user, :card])
 
+    has_one(:amount, through: [:transaction, :amount])
+    
     field :asin, :string
     field :link, :string
+    field :price, :float
     field :status, Status, default: :created
     field :thumbnail_url, :string
     field :title, :string
@@ -39,6 +42,7 @@ defmodule HubContext.Schema.Order do
     |> validate_required([:user_id])
     |> validate_format(:link, ~r/^http/i)
     |> update_change(:link, &normalize_link/1)
+    |> update_change(:title, &String.trim/1)
     |> add_asin()
     |> unique_constraint(:asin, name: :orders_asin_user_id_index)
   end
