@@ -6,10 +6,10 @@ defmodule Atm.Application do
   def start(_type, _args) do
     children =
       [
+        {Phoenix.PubSub.PG2, name: LAN},
         {Scenic.Sensor, nil},
         Atm.Magstripe,
-        Atm.Session,
-        {Phoenix.PubSub.PG2, name: LAN}
+        Atm.Session
       ] ++ children_for(@target)
 
     opts = [strategy: :one_for_one, name: Atm.Supervisor]

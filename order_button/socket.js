@@ -8,7 +8,9 @@ import {Socket} from './phoenix.js';
     channel: null,
     user: document.getElementById("current-user").getAttribute("value"),
     socket: new Socket("wss://10.0.1.7:4081/socket", {params: {}}),
-    thumbnail: document.querySelector(".image.itemNo0.selected img").getAttribute("src"),
+    thumbnail: null,
+    title: null,
+    price: null,
     orderStatus: null
   }
 
@@ -32,7 +34,7 @@ import {Socket} from './phoenix.js';
 
   function createOrderRequest(e) {
     if (state.orderStatus === "new") {
-      state.channel.push("create_order", {link: window.location.href, thumbnail_url: state.thumbnail})
+      state.channel.push("create_order", {link: window.location.href, price: state.price, thumbnail_url: state.thumbnail, title: state.title})
         .receive("ok", updateOrderButton)
         .receive("error", updateOrderButton)
     } else {
@@ -77,6 +79,10 @@ import {Socket} from './phoenix.js';
   **/
 
   if (state.cartButton) {
+    state.thumbnail = document.querySelector(".image.itemNo0.selected img").getAttribute("src"),
+    state.title = document.getElementById("productTitle").textContent.trim(),
+    state.price = document.querySelector("[data-asin-price]").getAttribute("data-asin-price"),
+    
     createOrderRequestButton(state.cartButton);
     removeUnwantedButtons();
 
@@ -86,5 +92,18 @@ import {Socket} from './phoenix.js';
     state.channel.join()
       .receive("ok", updateOrderButton)
       .receive("error", updateOrderButton)
+  } else {
+    state.socket.connect();
+    state.channel = state.socket.channel("orders:" + state.user)
+
+    state.channel.join()
+    .receive("ok", resp => {console.log("HOWDY!")})
+    .receive("error", resp => {console.log(resp)})
   }
+
+  // Support opening links from ATM
+  state.channel.on("open", payload => {
+    console.log("opening...")
+    window.open(payload.link)
+  })
 })();

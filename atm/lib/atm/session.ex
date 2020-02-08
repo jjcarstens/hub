@@ -9,7 +9,7 @@ defmodule Atm.Session do
   defmodule State do
     defstruct brightness: 65,
               current_user: nil,
-              timeout: 36_000_000,
+              timeout: 45000,
               dimmed: false,
               backlight: :on
   end
@@ -55,7 +55,7 @@ defmodule Atm.Session do
 
   def handle_call({:set_user, user}, _from, state) do
     user = HubContext.Repo.preload(user, :orders)
-    {:reply, :ok, %{state | current_user: user}}
+    {:reply, :ok, %{state | current_user: user}, state.timeout}
   end
 
   def handle_call({:set_timeout, timeout}, _from, state) do
@@ -67,7 +67,7 @@ defmodule Atm.Session do
   end
 
   def handle_call(:wake, _from, state) do
-    {:reply, :ok, wake(state)}
+    {:reply, :ok, wake(state), state.timeout}
   end
 
   @impl true

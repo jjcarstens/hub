@@ -7,6 +7,8 @@ defmodule HubContext.Orders do
     Repo.get_by(Order, asin: asin(link))
   end
 
+  def find(id), do: Repo.get(Order, id)
+
   def update(%Order{} = order, attrs) do
     Order.changeset(order, attrs)
     |> Repo.update

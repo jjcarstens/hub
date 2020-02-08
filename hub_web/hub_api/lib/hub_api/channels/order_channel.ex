@@ -16,7 +16,19 @@ defmodule HubApi.OrderChannel do
         order = Enum.find(user.orders, %{status: "new"}, & &1.asin == asin)
 
         {:ok, %{order_status: order.status}, assign(socket, :user, user)}
-    end\
+    end
+  end
+
+  def join("orders:" <> first_name, _params, socket) do
+    # This is a background socket waiting to open a page..
+    case Repo.get_by(User, first_name: first_name) do
+      nil ->
+        {:error, %{order_status: "error", msg: "bad_user"}}
+      user ->
+        Phoenix.PubSub.subscribe(LAN, "orders:#{first_name}:open")
+
+        {:ok, %{}, assign(socket, :user, user)}
+    end
   end
 
   # Channels can be used in a request/response fashion
@@ -56,6 +68,11 @@ defmodule HubApi.OrderChannel do
   # broadcast to everyone in the current topic (nerves:lobby).
   def handle_in("shout", payload, socket) do
     broadcast socket, "shout", payload
+    {:noreply, socket}
+  end
+
+  def handle_info({:open, link}, socket) do
+    push socket, "open", %{link: link}
     {:noreply, socket}
   end
 end

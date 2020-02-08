@@ -8,7 +8,7 @@
   "content_scripts": [
     {
       "css": ["order-button.css"],
-      "matches": ["https://*.amazon.com/*"],
+      "matches": ["<all_urls>"],
       "js": ["content_script.js"],
       "run_at": "document_idle"
     }
