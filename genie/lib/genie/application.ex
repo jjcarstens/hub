@@ -11,17 +11,7 @@ defmodule Genie.Application do
   end
 
   def children(target) do
-    cert =
-      Application.get_env(:genie, :certfile)
-      |> NervesHub.Certificate.pem_to_der()
-
-    key =
-      Application.get_env(:genie, :keyfile)
-      |> X509.PrivateKey.from_pem!()
-      |> X509.PrivateKey.to_der()
-
     [
-      {NervesHub.Supervisor, [cert: cert, key: {:ECPrivateKey, key}]},
       {Genie.Websocket, []}
     ] ++ target_children(target)
   end

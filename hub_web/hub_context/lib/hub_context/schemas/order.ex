@@ -12,8 +12,6 @@ defmodule HubContext.Schema.Order do
     has_one(:transaction, Transaction)
     has_one(:card, through: [:user, :card])
 
-    has_one(:amount, through: [:transaction, :amount])
-    
     field :asin, :string
     field :link, :string
     field :price, :float

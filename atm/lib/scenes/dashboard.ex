@@ -25,15 +25,20 @@ defmodule Atm.Scene.Dashboard do
     {:ok, %{graph: graph, user: user}, push: graph}
   end
 
-  def handle_input(_input, state) do
-    Atm.Session.tick()
-    {:noreply, state}
-  end
+  # def handle_input(input, _context, state) do
+  #   Atm.Session.tick()
+
+  #   {:noreply, state}
+  # end
+
+  # def filter_event(_e, _, state) do
+  #   {:noreply, state}
+  # end
 
   defp scene_for_role(graph, user) do
     pages =
       Enum.sort_by(user.orders, & &1.status)
-      |> Enum.chunk_every(10)
+      |> Enum.chunk_every(8)
       |> Enum.with_index(1)
       |> Enum.into(%{}, fn {v, k} -> {k, v} end)
 
