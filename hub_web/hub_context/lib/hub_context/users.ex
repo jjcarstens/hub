@@ -1,10 +1,32 @@
 defmodule HubContext.Users do
   import Ecto.Query
 
-  alias HubContext.Schema.{Order, Selection, User}
+  alias HubContext.Schema.{Order, Selection, Transaction, User}
   alias HubContext.Repo
 
   def all(), do: Repo.all(User)
+
+  # returns {available, balance}
+  def balances(%User{} = user) do
+    credits = from(t in Transaction, where: [user_id: ^user.id, type: "CREDIT"], select: [:amount])
+    |> Repo.all()
+    |> Enum.map(& &1.amount)
+    |> Enum.sum()
+
+    debits = from(t in Transaction, where: t.user_id == ^user.id and is_nil(t.order_id) and t.type == "DEBIT", select: [:amount])
+    |> Repo.all()
+    |> Enum.map(& &1.amount)
+    |> Enum.sum()
+
+    balance = Float.round(credits - debits, 2)
+
+    orders =
+    from(o in Order,
+    where: [user_id: ^user.id],
+    preload: [:transaction])
+    |> Repo.all
+    |> Enum.reduce({balance, balance}, &increment_balance/2)
+  end
 
   def by_email(nil), do: nil
   def by_email(""), do: nil
@@ -45,5 +67,15 @@ defmodule HubContext.Users do
   def update(%User{} = user, attrs) do
     User.changeset(user, attrs)
     |> Repo.update
+  end
+
+  defp increment_balance(order, {available, balance}) do
+    if is_nil(order.transaction) do
+      amount = order.price || 0
+      {Float.round(available - amount, 2), balance}
+    else
+      amount = order.transaction.amount || 0
+      {available, Float.round(balance - amount, 2)}
+    end
   end
 end
