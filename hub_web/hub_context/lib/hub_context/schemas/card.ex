@@ -20,6 +20,6 @@ defmodule HubContext.Schema.Card do
     card
     |> cast(attrs, __MODULE__.__schema__(:fields))
     |> validate_required([:user_id, :magstripe])
-    |> unique_constraint(:magstripe)
+    |> unique_constraint(:magstripe, name: :cards_magstripe_index)
   end
 end
