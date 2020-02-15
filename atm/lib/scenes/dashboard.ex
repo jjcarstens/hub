@@ -1,52 +1,104 @@
 defmodule Atm.Scene.Dashboard do
   use Atm.Scene
 
-  alias HubContext.Schema.Order
+  alias HubContext.{Repo, Users}
+
+  @kids ["Kaden", "Gavin", "Charlotte", "Garrett"]
 
   @graph Graph.build()
          |> rect({480, 800}, id: :background)
-  #  |> button("created", theme: :primary, id: :back, t: {52.5, 60}, radius: 8, width: 90)
-  #  |> button("requested", theme: :secondary, id: :back, t: {147.5, 60}, radius: 8, width: 90)
-  #  |> button("approved", theme: :success, id: :back, t: {242.5, 60}, radius: 8, width: 90)
-  #  |> button("denied", theme: :danger, id: :back, t: {337.5, 60}, radius: 8, width: 90)
-  #  |> rect({440, 645}, t: {20, 100}, fill: :blue, id: :orders)
-  #  |> button("<", theme: :primary, id: :back, t: {172.5, 755}, radius: 8, width: 65)
-  #  |> button(">", theme: :primary, id: :forward, t: {242.5, 755}, radius: 8, width: 65)
 
-  def init(_args, _opts) do
-    user = Atm.Session.current_user()
-    name_x = 240 - byte_size(user.first_name) * 8.5
+  @impl true
+  def init(user, _opts) do
+    graph = Atm.Component.Loader.add_to_graph(@graph)
+    user = user || Atm.Session.current_user()
 
-    graph =
-      @graph
-      |> text(user.first_name, font_size: 40, t: get_t({name_x, 40}))
-      |> Atm.Component.OrdersList.add_to_graph({user, user.orders})
+    send(self(), :load)
 
     {:ok, %{graph: graph, user: user}, push: graph}
   end
 
-  # def handle_input(input, _context, state) do
-  #   Atm.Session.tick()
+  @impl true
+  def filter_event({:click, :cards}, _, state) do
+    Atm.Session.tick()
 
-  #   {:noreply, state}
-  # end
+    ViewPort.set_root(:main_viewport, {Atm.Scene.Cards, nil})
 
-  # def filter_event(_e, _, state) do
-  #   {:noreply, state}
-  # end
+    {:halt, state}
+  end
 
-  defp scene_for_role(graph, user) do
-    pages =
-      Enum.sort_by(user.orders, & &1.status)
-      |> Enum.chunk_every(8)
-      |> Enum.with_index(1)
-      |> Enum.into(%{}, fn {v, k} -> {k, v} end)
+  def filter_event({:click, {:kid, id}}, _, state) do
+    Atm.Session.tick()
 
-    # display the orders
-    # if user, tap thumbnail/text opens webpage
-    # if admin, prompts for approval
-    # status - thumbnail - title text - delete
+    kid = Users.get_by_id(id) |> Repo.preload(:orders)
 
-    {:ok, %{graph: graph, user: user, pages: pages, page: 1}, push: graph}
+    graph = graph_for_role(kid)
+
+    {:noreply, %{state | graph: graph}, push: graph}
+  end
+
+  @impl true
+  def handle_info(:load, state) do
+    graph = graph_for_role(state.user)
+
+    {:noreply, %{state | graph: graph}, push: graph}
+  end
+
+  defp build_kid_preview({kid, i}) do
+    order_status =
+      Enum.group_by(kid.orders, & &1.status)
+      |> Enum.reverse()
+      |> Enum.with_index()
+      |> Enum.map(fn {{status, o}, i} ->
+        x = if rem(i, 2) == 0, do: 60, else: 135
+        y = if i < 2, do: 40, else: 80
+        label = String.first("#{status}")
+        text_spec("#{label}: #{length(o)}", t: {x, y}, fill: color_for_status(status))
+      end)
+
+    {available, balance} = Users.balances(kid)
+
+    preview = [
+      button_spec("", height: 117.5, width: 440, theme: :dark, id: {:kid, kid.id}),
+      text_spec(kid.first_name, font_size: 35, t: {15, 30}),
+      text_spec("Balance: $", t: {15, 70}),
+      text_spec("#{balance}", t: {112, 70}, fill: color_for_amount(balance)),
+      text_spec("Available: $", t: {15, 100}),
+      text_spec("#{available}", t: {122, 100}, fill: color_for_amount(available)),
+      group_spec(order_status, t: {190, 10})
+    ]
+
+    y = 250 + i * 137.5
+    group_spec(preview, t: get_t({20, y}))
+  end
+
+  defp color_for_status(status) do
+    case status do
+      :created -> :blue
+      :requested -> :gray
+      :approved -> :green
+      :denied -> :red
+      _ -> :yellow
+    end
+  end
+
+  defp graph_for_role(%{role: :admin}) do
+    kid_previews =
+      Enum.map(@kids, &Users.by_email(&1 <> "@jjcarstens.com"))
+      |> Enum.map(&Repo.preload(&1, :orders))
+      |> Enum.with_index()
+      |> Enum.map(&build_kid_preview/1)
+
+    @graph
+    |> button("", height: 210, width: 210, theme: :dark, t: get_t({20, 20}))
+    |> button("", height: 210, width: 210, theme: :dark, id: :cards, t: get_t({250, 20}))
+    |> text("+", font_size: 100, t: get_t({125, 125}))
+    |> add_specs_to_graph(kid_previews)
+  end
+
+  defp graph_for_role(user) do
+    @graph
+    |> Atm.Component.OrdersList.add_to_graph({user, user.orders})
+    |> Atm.Component.Nav.add_to_graph(%{title: user.first_name})
   end
 end
