@@ -19,6 +19,7 @@ defmodule Atm.Scene.Splash do
          )
          |> slider({{14, 255}, 65}, id: :brightness, t: get_t({100, 740}), hidden: true)
 
+  @impl true
   def init(_first_scene, _opts) do
     state = %{}
 
@@ -46,6 +47,7 @@ defmodule Atm.Scene.Splash do
     {:noreply, state}
   end
 
+  @impl true
   def handle_input({:cursor_button, {_, :press, _, _}}, _context, state) do
     Atm.Session.tick()
 
@@ -63,6 +65,7 @@ defmodule Atm.Scene.Splash do
     {:noreply, state}
   end
 
+  @impl true
   def filter_event({:value_changed, :brightness, val}, _from, state) do
     Atm.Session.set_brightness(val)
     {:noreply, state}
