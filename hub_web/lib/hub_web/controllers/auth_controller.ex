@@ -25,7 +25,7 @@ defmodule HubWeb.AuthController do
 
         conn
         |> configure_session(renew: true)
-        |> put_session(:user_id, user.id)
+        |> put_session("user_id", user.id)
         |> assign(:current_user, user)
         |> put_flash(:info, "#{user.first_name} signed in")
         |> redirect(to: origin)

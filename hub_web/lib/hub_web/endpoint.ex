@@ -1,7 +1,15 @@
 defmodule HubWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :hub_web
 
-  socket "/live", Phoenix.LiveView.Socket, websocket: true
+  @session_opts [
+    store: :cookie,
+    key: "_hub_key",
+    signing_salt: "yUEuWAW4",
+    # 30 days
+    max_age: 60 * 60 * 24 * 30
+  ]
+
+  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_opts]]
 
   socket "/socket", HubWeb.UserSocket,
     websocket: true,
@@ -43,12 +51,7 @@ defmodule HubWeb.Endpoint do
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
-  plug Plug.Session,
-    store: :cookie,
-    key: "_hub_key",
-    signing_salt: "yUEuWAW4",
-    # 30 days
-    max_age: 60 * 60 * 24 * 30
+  plug Plug.Session, @session_opts
 
   plug HubWeb.Router
 end

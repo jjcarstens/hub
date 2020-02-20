@@ -14,6 +14,8 @@ defmodule HubContext.Schema.Transaction do
     field :date, :date
     field :description, :string
     field :guid, :string
+    field :merchant_guid, :string
+    field :original_description, :string
     field :posted_at, :utc_datetime
     field :status, Status
     field :transacted_at, :utc_datetime
@@ -28,8 +30,11 @@ defmodule HubContext.Schema.Transaction do
   end
 
   def changeset(%__MODULE__{} = transaction, attrs) do
+    fields = __MODULE__.__schema__(:fields) -- [:id, :updated_at]
+    
     transaction
-    |> cast(attrs, __MODULE__.__schema__(:fields))
+    |> cast(attrs, fields)
     |> validate_required([:status, :type])
+    |> unique_constraint(:guid)
   end
 end

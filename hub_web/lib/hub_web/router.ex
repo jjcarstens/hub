@@ -4,7 +4,7 @@ defmodule HubWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
+    # plug :fetch_flash
     plug Phoenix.LiveView.Flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
@@ -18,8 +18,8 @@ defmodule HubWeb.Router do
   scope "/", HubWeb do
     pipe_through :browser
 
-    live "/", HomeLive, session: ["user_id"]
-    live "/admin", AdminLive, session: ["user_id"]
+    live "/", HomeLive
+    live "/admin", AdminLive
     live "/storage_room", StorageRoomLive
     live "/transaction/new", TransactionLive.New
 

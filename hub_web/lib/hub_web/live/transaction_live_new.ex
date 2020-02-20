@@ -30,7 +30,7 @@ defmodule HubWeb.TransactionLive.New do
         socket =
           socket
           |> put_flash(:info, "transaction created")
-          |> redirect(to: "/admin")
+          |> redirect(to: "/transaction/new")
 
         {:stop, socket}
 

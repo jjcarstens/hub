@@ -8,7 +8,7 @@ defmodule HubContext.Schema.User do
     has_one(:card, HubContext.Schema.Card)
     has_many(:orders, HubContext.Schema.Order)
     has_many(:selections, HubContext.Schema.Selection)
-    has_many(:transactions, through: [:orders, :transaction])
+    has_many(:transactions, HubContext.Schema.Transaction)
 
     field :card_number, :string
     field(:color, {:array, :integer}, default: [Enum.random(0..255),Enum.random(0..255),Enum.random(0..255)])
