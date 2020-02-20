@@ -20,6 +20,7 @@ defmodule HubContext.MixProject do
 
   defp deps do
     [
+      {:atrium, github: "mxenabled/atrium-elixir", branch: "jason"},
       {:ecto_enum, "~> 1.2"},
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},

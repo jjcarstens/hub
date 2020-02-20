@@ -7,7 +7,7 @@ defmodule HubWeb.AdminLive do
     Phoenix.View.render(HubWeb.AdminView, "index.html", assigns)
   end
 
-  def mount(%{"user_id" => user_id}, socket) do
+  def mount(_params, %{"user_id" => user_id}, socket) do
     socket
     |> assign_new(:current_user, fn -> Users.get_by_id(user_id) end)
     |> validate_admin()
