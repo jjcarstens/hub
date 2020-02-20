@@ -36,9 +36,14 @@ defmodule Atm.Scene.SecureKeypad do
     state =
       incoming
       |> Map.put(:key_presses, [])
-      |> Map.put(:graph, @graph)
+      |> Map.put_new(:redirect, {Atm.Scene.Dashboard, nil})
+      |> Map.put_new(:title, "")
 
-    {:ok, state, push: @graph}
+    graph =
+      @graph
+      |> Atm.Component.Nav.add_to_graph(Map.take(state, [:title, :redirect]))
+
+    {:ok, Map.put(state, :graph, graph), push: graph}
   end
 
   def filter_event({:click, :backspace}, _, state) do
@@ -56,7 +61,7 @@ defmodule Atm.Scene.SecureKeypad do
   end
 
   def handle_info(:redirect, state) do
-    ViewPort.set_root(:main_viewport, {state.redirect, nil})
+    ViewPort.set_root(:main_viewport, state.redirect)
     {:noreply, state}
   end
 

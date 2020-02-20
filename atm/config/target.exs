@@ -27,4 +27,6 @@ config :nerves_pack, host: [:hostname, "atm"]
 
 config :nerves_runtime, :kernel, use_system_registry: false
 
+config :tzdata, :data_dir, "/root/tzdata"
+
 import_config "#{Mix.target()}.exs"

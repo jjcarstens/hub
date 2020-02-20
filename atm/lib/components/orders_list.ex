@@ -205,7 +205,13 @@ defmodule Atm.Component.OrdersList do
             t: {65, 25},
             id: {:order, order.id}
           ),
-          text_spec("$ #{order.price}", t: {200, 50})
+          text_spec("$ #{order.price}", t: {200, 50}),
+          button_spec("",
+            id: {:order, order.id},
+            theme: %{active: :clear, text: :white, border: :clear, background: :clear},
+            height: 60,
+            width: 460
+          )
         ],
         t: {0, i * 80},
         id: {:order, order.id}

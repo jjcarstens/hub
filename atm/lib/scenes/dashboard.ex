@@ -53,7 +53,12 @@ defmodule Atm.Scene.Dashboard do
         x = if rem(i, 2) == 0, do: 60, else: 135
         y = if i < 2, do: 40, else: 80
         label = String.first("#{status}")
-        text_spec("#{label}: #{length(o)}", t: {x, y}, fill: color_for_status(status))
+
+        text_spec("#{label}: #{length(o)}",
+          t: {x, y},
+          fill: color_for_status(status),
+          hidden: length(o) == 0
+        )
       end)
 
     {available, balance} = Users.balances(kid)
@@ -89,9 +94,12 @@ defmodule Atm.Scene.Dashboard do
       |> Enum.with_index()
       |> Enum.map(&build_kid_preview/1)
 
+    %{fm_width: card_w} = get_font_metrics("Cards", 60)
+
     @graph
     |> button("", height: 210, width: 210, theme: :dark, t: get_t({20, 20}))
     |> button("", height: 210, width: 210, theme: :dark, id: :cards, t: get_t({250, 20}))
+    |> text("Cards", font_size: 60, t: get_t({105 - card_w / 2 + 250, 125}))
     |> text("+", font_size: 100, t: get_t({125, 125}))
     |> add_specs_to_graph(kid_previews)
   end
