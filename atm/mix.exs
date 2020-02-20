@@ -44,6 +44,7 @@ defmodule Atm.MixProject do
       {:shoehorn, "~> 0.6"},
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
+      {:scenic_keypad, path: "../../scenic_keypad"},
       {:scenic_sensor, "~> 0.7"},
       {:scenic_live_reload, "~> 0.2", only: :dev, targets: :host},
 

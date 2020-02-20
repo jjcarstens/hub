@@ -6,6 +6,13 @@ defmodule Atm.Scene.Splash do
          |> group(
            fn g ->
              circle(g, 120, fill: :blue)
+             |> text("$",
+               font_size: 200,
+               text_align: :center,
+               fill: :grey,
+               font_blur: 1.0,
+               translate: {3, 64}
+             )
              |> text("$", font_size: 200, text_align: :center, translate: {0, 60})
            end,
            id: :logo,

@@ -1,12 +1,9 @@
 defmodule Atm.Magstripe do
   use GenServer
 
-  alias Scenic.Sensor
-
   require Logger
 
   @device_name "HID c216:0180"
-  @sensor_id :magstripe
 
   def start_link(args \\ []) do
     GenServer.start_link(__MODULE__, args, name: __MODULE__)

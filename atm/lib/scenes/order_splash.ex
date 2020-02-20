@@ -1,55 +1,45 @@
 defmodule Atm.Scene.OrderSplash do
   use Atm.Scene
 
+  alias Atm.Thumbnails
   alias HubContext.{Repo, Schema.Order}
 
   @graph Graph.build()
          |> rect({480, 800}, id: :background)
-         |> text("User",
+         #  |> text("User",
+         #    font_size: 40,
+         #    t: get_t({160, 80}),
+         #    id: :user
+         #  )
+         |> text("Swipe to request order",
            font_size: 40,
-           t: get_t({160, 80}),
-           id: :user
-         )
-         |> text("Swipe to complete",
-           font_size: 40,
-           t: get_t({100, 580}),
+           t: get_t({75, 580}),
            id: :message
          )
-         |> rrect({200, 200, 5}, fill: :green, id: :image, t: get_t({140, 200}))
+         |> rrect({200, 200, 5}, fill: :green, id: :image, t: get_t({140, 250}))
 
   @impl true
   def init(%Order{} = order, _opts) do
     order = Repo.preload(order, [:user, :card])
 
-    # Scenic.Sensor.subscribe(:magstripe)
     Phoenix.PubSub.subscribe(LAN, "magstripe")
 
     send(self(), :create_thumbnail)
 
+    price = "$ #{order.price}"
+    %{fm_width: price_w} = get_font_metrics(price, 60)
+
     graph =
       @graph
-      |> Graph.modify(:user, &text(&1, order.user.first_name))
+      |> text(price, font_size: 60, t: get_t({240 - price_w / 2, 200}))
+      |> Atm.Component.Nav.add_to_graph(%{title: order.user.first_name})
 
     {:ok, %{order: order, card: order.card, graph: graph}, push: graph}
   end
 
   @impl true
   def handle_info(:create_thumbnail, state) do
-    url = resize_thumbnail(state.order)
-    name = "order-#{state.order.id}.jpg"
-
-    path =
-      Application.get_env(:atm, :thumbnail_dir, "/tmp/thumbnails")
-      |> Path.join(name)
-
-    unless File.exists?(path) do
-      File.mkdir_p(Path.dirname(path))
-      Download.from(url, path: path)
-    end
-
-    hash = Scenic.Cache.Support.Hash.file!(path, :sha)
-
-    Scenic.Cache.Static.Texture.load(path, hash)
+    hash = Thumbnails.fetch_for(state.order)
 
     graph =
       state.graph
@@ -61,12 +51,12 @@ defmodule Atm.Scene.OrderSplash do
       {:noreply, state}
   end
 
-  # def handle_info({:sensor, :data, {:magstripe, %{data: data}, _}}, %{card: %{magstripe: data}} = state) do
   def handle_info({:magstripe, data}, %{card: %{magstripe: data}} = state) do
     Atm.Session.tick()
+    Atm.Session.set_user(state.order.user)
 
     args =
-      Map.put(state, :redirect, Atm.Scene.Dashboard)
+      Map.put(state, :redirect, {Atm.Scene.Dashboard, nil})
       |> Map.delete(:graph)
 
     Scenic.ViewPort.set_root(:main_viewport, {Atm.Scene.SecureKeypad, args})
