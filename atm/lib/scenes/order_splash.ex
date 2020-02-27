@@ -6,11 +6,6 @@ defmodule Atm.Scene.OrderSplash do
 
   @graph Graph.build()
          |> rect({480, 800}, id: :background)
-         #  |> text("User",
-         #    font_size: 40,
-         #    t: get_t({160, 80}),
-         #    id: :user
-         #  )
          |> text("Swipe to request order",
            font_size: 40,
            t: get_t({75, 580}),
@@ -74,13 +69,5 @@ defmodule Atm.Scene.OrderSplash do
     Atm.Session.tick()
 
     {:noreply, state}
-  end
-
-  defp resize_thumbnail(%{thumbnail_url: url}) do
-    [size | _] = Regex.run(~r/\._.*_\.(jpg|jpeg)$/, url, capture: :first)
-    new = String.replace(size, ~r/\d+/, "200")
-    String.replace(url, size, new)
-  rescue
-    _e -> url
   end
 end

@@ -32,7 +32,7 @@ defmodule HubWeb.TransactionLive.New do
           |> put_flash(:info, "transaction created")
           |> redirect(to: "/transaction/new")
 
-        {:stop, socket}
+        {:noreply, socket}
 
       {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

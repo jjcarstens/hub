@@ -39,7 +39,7 @@ help() {
 }
 
 [ -n "$DESTINATION" ] || DESTINATION=lamp.local
-[ -n "$MIX_TARGET" ] || MIX_TARGET=rpi0
+[ -n "$MIX_TARGET" ] || MIX_TARGET=rpi3
 [ -n "$MIX_ENV" ] || MIX_ENV=dev
 if [ -z "$FILENAME" ]; then
     FIRMWARE_PATH="./_build/${MIX_TARGET}_${MIX_ENV}/nerves/images"

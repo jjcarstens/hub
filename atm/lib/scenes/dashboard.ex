@@ -37,6 +37,20 @@ defmodule Atm.Scene.Dashboard do
     {:noreply, %{state | graph: graph}, push: graph}
   end
 
+  def filter_event({:click, :info}, _, state) do
+    Atm.Session.tick()
+
+    ViewPort.set_root(:main_viewport, {Atm.Scene.Info, nil})
+
+    {:halt, state}
+  end
+
+  def filter_event(_, _, state) do
+    Atm.Session.tick()
+
+    {:noreply, state}
+  end
+
   @impl true
   def handle_info(:load, state) do
     graph = graph_for_role(state.user)
@@ -97,10 +111,16 @@ defmodule Atm.Scene.Dashboard do
     %{fm_width: card_w} = get_font_metrics("Cards", 60)
 
     @graph
-    |> button("", height: 210, width: 210, theme: :dark, t: get_t({20, 20}))
+    |> button("Info", height: 95, width: 210, theme: :dark, id: :info, t: get_t({20, 20}))
+    |> button("Transactions",
+      height: 95,
+      width: 210,
+      theme: :dark,
+      id: :transactions,
+      t: get_t({20, 135})
+    )
     |> button("", height: 210, width: 210, theme: :dark, id: :cards, t: get_t({250, 20}))
     |> text("Cards", font_size: 60, t: get_t({105 - card_w / 2 + 250, 125}))
-    |> text("+", font_size: 100, t: get_t({125, 125}))
     |> add_specs_to_graph(kid_previews)
   end
 

@@ -4,6 +4,11 @@ defmodule Atm.Application do
   use Application
 
   def start(_type, _args) do
+    # Hackey start node
+    :os.cmd('epmd -daemon')
+    ip = Application.get_env(:atm, :ip, "10.0.1.38")
+    Node.start(:"banker@#{ip}")
+
     children =
       [
         {Phoenix.PubSub.PG2, name: LAN},

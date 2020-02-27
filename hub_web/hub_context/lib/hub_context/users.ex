@@ -21,7 +21,7 @@ defmodule HubContext.Users do
     balance = Float.round(credits - debits, 2)
 
     from(o in Order,
-    where: o.user_id == ^user.id and o.status != "denied",
+    where: o.user_id == ^user.id and o.status in ["requested", "approved"],
     preload: [:transaction])
     |> Repo.all
     |> Enum.reduce({balance, balance}, &increment_balance/2)
@@ -74,7 +74,7 @@ defmodule HubContext.Users do
       {Float.round(available - amount, 2), balance}
     else
       amount = order.transaction.amount || 0
-      {available, Float.round(balance - amount, 2)}
+      {Float.round(available - amount, 2), Float.round(balance - amount, 2)}
     end
   end
 end

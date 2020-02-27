@@ -1,12 +1,18 @@
 <h1>Add Transaction</h1>
 <%= f = form_for @changeset, "#", [phx_change: :validate, phx_submit: :save] %>
   <%= label f, :amount %>
-  <%= number_input f, :amount %>
+  <%= text_input f, :amount %>
   <%= error_tag f, :amount %>
 
   <%= label f, :date %>
   <%= date_select f, :date, year: [selected: Date.utc_today.year], month: [selected: Date.utc_today.month], day: [selected: Date.utc_today.day] %>
   <%= error_tag f, :date %>
+
+  <%= label f, :transacted_at %>
+  <%= datetime_select f, :transacted_at, year: [selected:
+  DateTime.utc_now.year], month: [selected: DateTime.utc_now.month], day:
+  [selected: DateTime.utc_now.day], hour: [selected: DateTime.utc_now().hour], minute: [selected: DateTime.utc_now().minute] %>
+  <%= error_tag f, :transacted_at %>
 
   <%= label f, :description %>
   <%= text_input f, :description %>
