@@ -30,13 +30,17 @@ defmodule HubContext.Transactions do
 
   def potentials_for_order(%Order{inserted_at: o_date, price: price}) do
     tax = price * 0.08
-    amount_range = (price - tax)..(price + tax)
-    date_range = Date.add(o_date, -1)..Date.add(o_date, 4)
+    low_price = Float.round(price - tax, 2)
+    high_price = Float.round(price + tax, 2)
+
+    low_date = NaiveDateTime.add(o_date, -86400) # -1 day
+    high_date = NaiveDateTime.add(o_date, 345600) # 4 days
 
     from(
       t in Transaction,
-      where: not is_nil(t.order_id),
-      where: (t.amount in ^amount_range or t.transacted_at in ^date_range)
+      where: is_nil(t.order_id),
+      where: [type: "DEBIT"],
+      where: (fragment("? BETWEEN ? AND ?", t.amount, ^low_price, ^high_price) and fragment("? BETWEEN ? AND ?", t.transacted_at, ^low_date, ^high_date))
     )
     |> Repo.all()
   end

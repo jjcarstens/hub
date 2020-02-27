@@ -7,7 +7,7 @@ defmodule Atm.Component.OrdersList do
 
   alias Atm.Thumbnails
   alias HubContext.Schema.{Order, User}
-  alias HubContext.Users
+  alias HubContext.{Repo, Users}
   alias Scenic.Graph
 
   @graph Graph.build()
@@ -205,7 +205,7 @@ defmodule Atm.Component.OrdersList do
             t: {65, 25},
             id: {:order, order.id}
           ),
-          text_spec("$ #{order.price}", t: {200, 50}),
+          text_spec("$ #{price_or_amount(order)}", t: {200, 50}),
           button_spec("",
             id: {:order, order.id},
             theme: %{active: :clear, text: :white, border: :clear, background: :clear},
@@ -229,6 +229,11 @@ defmodule Atm.Component.OrdersList do
       |> Enum.into(%{}, fn {v, k} -> {k, v} end)
 
     %{state | pages: pages}
+  end
+
+  defp price_or_amount(order) do
+    order = Repo.preload(order, :transaction)
+    if order.transaction, do: order.transaction.amount, else: order.price
   end
 
   defp theme_for(%{status: status}) do

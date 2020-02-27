@@ -10,7 +10,7 @@ defmodule Atm.Scene.Order do
 
   @impl true
   def init([order_id, redirect], _opts) do
-    order = Orders.find(order_id) |> Repo.preload(:user)
+    order = Orders.find(order_id) |> Repo.preload([:user, :transaction])
     user = Atm.Session.current_user()
 
     redirect = redirect || {Atm.Scene.Dashboard, nil}
@@ -54,7 +54,7 @@ defmodule Atm.Scene.Order do
       Graph.build()
       |> rect({480, 800}, id: :background, fill: color_for_status(order), t: get_t({0, 0}))
       |> text(title, t: get_t({10, 200}))
-      |> text("$ #{order.price}", font_size: 40, t: get_t({180, 310}))
+      |> text("$ #{price_or_amount(order)}", font_size: 40, t: get_t({180, 310}))
       |> rect({200, 200}, fill: {:image, Thumbnails.fetch_for(order)}, t: get_t({140, 350}))
       |> text("#{order.status}: #{order.updated_at}", t: get_t({80, 600}))
       |> button("Open",
@@ -167,6 +167,10 @@ defmodule Atm.Scene.Order do
       :denied -> :red
       _ -> :yellow
     end
+  end
+
+  defp price_or_amount(%{transaction: t, price: p}) do
+    if t, do: t.amount, else: p
   end
 
   def update_order_status(%{order: order} = state, status) do

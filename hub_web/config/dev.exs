@@ -59,3 +59,7 @@ config :logger, :console, format: "[$level] $message\n"
 config :phoenix,
   plug_init_mode: :runtime,
   stacktrace_depth: 20
+
+if System.get_env("DEMO") do
+  import_config("demo.exs")
+end
