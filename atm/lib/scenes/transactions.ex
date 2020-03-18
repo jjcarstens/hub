@@ -5,7 +5,7 @@ defmodule Atm.Scene.Transactions do
          |> rect({480, 800}, id: :background)
 
   def init(user, _opts) do
-    graph = Atm.Component.Loader.add_to_graph(@graph)
+    graph = loader(@graph, t: center())
     user = user || Atm.Session.current_user()
 
     {:ok, %{user: user}, push: graph}

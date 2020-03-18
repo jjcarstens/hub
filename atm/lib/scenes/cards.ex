@@ -28,7 +28,7 @@ defmodule Atm.Scene.Cards do
 
   @impl true
   def init(user, _opts) do
-    graph = Loader.add_to_graph(@graph)
+    graph = loader(@graph)
     user = user || Atm.Session.current_user()
 
     send(self(), :load)
@@ -121,7 +121,7 @@ defmodule Atm.Scene.Cards do
     graph =
       graph
       |> add_specs_to_graph(spec, id: :overlay, t: get_t({0, 58}))
-      |> Loader.add_to_graph([], id: :loader)
+      |> loader(id: :loader, t: center())
 
     Phoenix.PubSub.subscribe(LAN, "magstripe")
 
