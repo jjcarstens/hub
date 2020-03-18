@@ -10,7 +10,7 @@ defmodule Atm.Scene.Dashboard do
 
   @impl true
   def init(user, _opts) do
-    graph = Atm.Component.Loader.add_to_graph(@graph)
+    graph = loader(@graph, t: center())
     user = user || Atm.Session.current_user()
 
     send(self(), :load)

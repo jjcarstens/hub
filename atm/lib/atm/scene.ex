@@ -6,9 +6,10 @@ defmodule Atm.Scene do
       import Scenic.{Components, Primitives}
       import Atm.Translator
       import Atm.Helpers
+      import Scenic.Loader.Component
 
       alias Scenic.{Graph, ViewPort}
-      alias Atm.Component.{Loader, Nav}
+      alias Atm.Component.Nav
     end
   end
 end

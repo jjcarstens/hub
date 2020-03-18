@@ -53,9 +53,11 @@ defmodule Genie.MixProject do
       {:websockex, "~> 0.4"},
 
       # Dependencies for all targets except :host
+      {:chisel, "~> 0.2.0", targets: @all_targets},
       {:circuits_gpio, "~> 0.3"},
       {:circuits_spi, "~> 0.1", targets: @all_targets},
       {:nerves_pack, "~> 0.2", targets: @all_targets},
+      {:oled, "~> 0.3.0", github: "pappersverk/oled", ref: "01f11cb3dfa5ac8f9e1a83bc1fd028dd42e1f302", targets: @all_targets},
       {:replex, "~> 0.2", targets: @all_targets},
       {:vintage_net_wizard, "~> 0.2", targets: @all_targets},
 
