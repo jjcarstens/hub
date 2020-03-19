@@ -42,7 +42,7 @@ defmodule Genie.MixProject do
       {:jason, "~> 1.1"},
       {:keypad, "~> 0.1"},
       {:nerves, "~> 1.4", runtime: false},
-      {:nerves_hub_link, path: "../../nerves_hub_link"},
+      {:nerves_hub_link, "~> 0.7"},
       # {:nerves_hub, "~> 0.1"},
       {:nerves_runtime, "~> 0.8"},
       {:pbx, path: "../pbx"},
@@ -53,6 +53,7 @@ defmodule Genie.MixProject do
       {:websockex, "~> 0.4"},
 
       # Dependencies for all targets except :host
+      {:input_event, "~> 0.4", targets: @all_targets},
       {:chisel, "~> 0.2.0", targets: @all_targets},
       {:circuits_gpio, "~> 0.3"},
       {:circuits_spi, "~> 0.1", targets: @all_targets},
