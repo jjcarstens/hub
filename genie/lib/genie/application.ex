@@ -24,7 +24,8 @@ defmodule Genie.Application do
       {Genie.MotionSensor, []},
       {Genie.StorageRelay, []},
       # Genie.KeypadDisplay,
-      %{id: Genie.Keypad, start: {Genie.Keypad, :start_link, []}},
+      # %{id: Genie.Keypad, start: {Genie.Keypad, :start_link, []}},
+      Genie.Numpad,
       Genie.AccessCodes
     ]
   end
