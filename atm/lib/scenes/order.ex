@@ -83,7 +83,8 @@ defmodule Atm.Scene.Order do
   def filter_event({:click, :open}, _, state) do
     Atm.Session.tick()
 
-    first_name = Repo.preload(state.order, :user).user.first_name
+    # first_name = Repo.preload(state.order, :user).user.first_name
+    first_name = Atm.Session.current_user().first_name
 
     Phoenix.PubSub.broadcast_from!(
       LAN,

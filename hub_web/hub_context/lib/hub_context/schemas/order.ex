@@ -25,7 +25,7 @@ defmodule HubContext.Schema.Order do
   def asin(%{link: @amazon_link <> asin}), do: asin
 
   def asin(link) do
-    Regex.run(~r/\/dp\/(\w*)(\/|\?|$)/, link, capture: :all_but_first)
+    Regex.run(~r/\/(dp|gp\/product)\/(?<asin>\w*)(\/|\?|$)/, link, capture: :all_names)
     |> hd()
   end
 

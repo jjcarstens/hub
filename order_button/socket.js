@@ -7,7 +7,7 @@ import {Socket} from './phoenix.js';
     cartButton: document.querySelector("#addToCart_feature_div,#addToCartDiv"),
     channel: null,
     user: document.getElementById("current-user").getAttribute("value"),
-    socket: new Socket("wss://localhost:4081/socket", {params: {}}),
+    socket: new Socket("wss://lamp.local:4081/socket", {params: {}}),
     thumbnail: null,
     title: null,
     price: null,
@@ -78,11 +78,11 @@ import {Socket} from './phoenix.js';
    * Logic
   **/
 
-  if (state.cartButton) {
+  if (state.cartButton && state.user != "Jonathan") {
     state.thumbnail = document.querySelector(".image.itemNo0.selected img").getAttribute("src"),
     state.title = document.getElementById("productTitle").textContent.trim(),
     state.price = document.querySelector("[data-asin-price]").getAttribute("data-asin-price"),
-    
+
     createOrderRequestButton(state.cartButton);
     removeUnwantedButtons();
 
